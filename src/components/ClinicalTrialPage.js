@@ -80,3 +80,4 @@ function ClinicalTrialPage() {
 }
 
 export default ClinicalTrialPage;
+

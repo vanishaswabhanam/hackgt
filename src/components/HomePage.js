@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 function HomePage() {
   const [textInput, setTextInput] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [result, setResult] = useState(null);
   const navigate = useNavigate();
 
   const handleFileChange = (event) => {
@@ -11,11 +13,39 @@ function HomePage() {
     setSelectedFile(file);
   };
 
-  const handleSubmit = () => {
-    if (textInput.trim() || selectedFile) {
-      navigate('/results');
-    } else {
+  const handleSubmit = async () => {
+    if (!textInput.trim() && !selectedFile) {
       alert('Please enter text or upload an image');
+      return;
+    }
+
+    setIsLoading(true);
+    setResult(null);
+
+    try {
+      const response = await fetch('http://localhost:5001/api/analyze', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          text: textInput.trim()
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        setResult(data);
+        // Don't navigate away - show result on same page
+      } else {
+        alert('Error: ' + (data.error || 'Failed to analyze text'));
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error connecting to the server. Please make sure the backend is running.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -55,12 +85,39 @@ function HomePage() {
       </div>
 
       <div style={{ textAlign: 'center', marginTop: '30px' }}>
-        <button className="btn" onClick={handleSubmit}>
-          Analyze & Get Recommendations
+        <button 
+          className="btn" 
+          onClick={handleSubmit}
+          disabled={isLoading}
+        >
+          {isLoading ? 'Analyzing...' : 'Analyze & Get Recommendations'}
         </button>
       </div>
+
+      {result && (
+        <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#283593', borderRadius: '8px' }}>
+          <h3>Analysis Result:</h3>
+          <pre style={{ 
+            backgroundColor: '#1a237e', 
+            padding: '15px', 
+            borderRadius: '5px', 
+            overflow: 'auto',
+            fontSize: '14px',
+            color: '#ffffff',
+            maxHeight: '400px'
+          }}>
+            {JSON.stringify(result.structuredData, null, 2)}
+          </pre>
+          <div style={{ textAlign: 'center', marginTop: '20px' }}>
+            <button className="btn btn-secondary" onClick={() => navigate('/results')}>
+              View Service Options →
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 export default HomePage;
+
