@@ -828,7 +828,7 @@ app.post('/api/classify-brain-tumor', upload.single('image'), async (req, res) =
       success: true,
       prediction: prediction,
       filename: req.file.originalname,
-      model_used: 'BrainTumor-EfficientNet-B3',
+      model_used: 'Pretrained-ResNet50-BrainTumor',
       inference_time: '< 1 second'
     });
     
@@ -852,11 +852,11 @@ app.post('/api/classify-brain-tumor', upload.single('image'), async (req, res) =
 // Function to classify brain tumor using Python model
 async function classifyBrainTumor(imagePath) {
   return new Promise((resolve, reject) => {
-    const pythonScript = path.join(__dirname, '../brain_tumor_classifier/inference/standalone_predictor.py');
+    const pythonScript = path.join(__dirname, '../brain_tumor_classifier/pretrained_inference.py');
     
     // Check if Python script exists, otherwise use demo prediction
     if (!fs.existsSync(pythonScript)) {
-      console.log('Python classifier not found, using demo prediction');
+      console.log('Pretrained classifier not found, using demo prediction');
       const demoPrediction = generateDemoPrediction();
       resolve(demoPrediction);
       return;
@@ -879,6 +879,7 @@ async function classifyBrainTumor(imagePath) {
       if (code === 0) {
         try {
           const result = JSON.parse(output);
+          console.log('Pretrained model prediction successful');
           resolve(result);
         } catch (parseError) {
           console.log('Failed to parse Python output, using demo prediction');
