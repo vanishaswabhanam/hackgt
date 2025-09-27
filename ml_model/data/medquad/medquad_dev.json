@@ -1,0 +1,17 @@
+[
+  {
+    "question": "What is the treatment for acute myocardial infarction?",
+    "answer": "Acute myocardial infarction treatment includes immediate aspirin, oxygen therapy, pain management with morphine, and reperfusion therapy (PCI or thrombolytics). Beta-blockers, ACE inhibitors, and statins should be initiated early. Antiplatelet therapy with dual antiplatelet agents is essential.",
+    "context": "Acute coronary syndrome management"
+  },
+  {
+    "question": "How should chronic kidney disease be managed?",
+    "answer": "Chronic kidney disease management includes blood pressure control with ACE inhibitors or ARBs, diabetes management, dietary modifications (low protein, low phosphorus), anemia management with erythropoietin, and preparation for renal replacement therapy when indicated.",
+    "context": "Nephrology guidelines"
+  },
+  {
+    "question": "What are the treatment options for asthma?",
+    "answer": "Asthma treatment includes inhaled corticosteroids as controller therapy, short-acting beta-agonists for rescue, long-acting beta-agonists for combination therapy, leukotriene modifiers, and systemic corticosteroids for severe exacerbations. Environmental trigger avoidance is crucial.",
+    "context": "Respiratory medicine"
+  }
+]

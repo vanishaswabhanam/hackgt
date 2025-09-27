@@ -1,12 +1,24 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function ResultsPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Get structured data from location state or localStorage
+  const structuredData = location.state?.structuredData || 
+    JSON.parse(localStorage.getItem('lastAnalysis') || '{}');
+  const originalText = location.state?.originalText || 
+    localStorage.getItem('lastAnalysisText') || '';
 
   const handleCardClick = (path) => {
     console.log('Card clicked:', path);
-    navigate(path);
+    navigate(path, {
+      state: {
+        structuredData: structuredData,
+        originalText: originalText
+      }
+    });
   };
 
   console.log('ResultsPage rendered with vertical layout');

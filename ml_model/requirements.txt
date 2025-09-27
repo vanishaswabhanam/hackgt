@@ -1,0 +1,34 @@
+# TinyLlama Medical Treatment Model Requirements
+# Fine-tuned on MedQuAD dataset for medical treatment recommendations
+
+# Core ML libraries
+torch>=2.0.0
+transformers>=4.30.0
+datasets>=2.12.0
+accelerate>=0.20.0
+
+# Hugging Face libraries
+huggingface-hub>=0.16.0
+tokenizers>=0.13.0
+
+# Data processing
+numpy>=1.24.0
+pandas>=2.0.0
+scikit-learn>=1.3.0
+
+# Google AI (for fallback)
+google-generativeai>=0.3.0
+
+# Utilities
+requests>=2.31.0
+tqdm>=4.65.0
+wandb>=0.15.0
+
+# Development
+jupyter>=1.0.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Model specific
+peft>=0.4.0  # For LoRA fine-tuning
+bitsandbytes>=0.39.0  # For quantization

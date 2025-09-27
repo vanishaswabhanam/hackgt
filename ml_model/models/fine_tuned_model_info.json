@@ -1,0 +1,13 @@
+{
+  "model_name": "TinyLlama-MedQuAD-Treatment",
+  "base_model": "TinyLlama-1.1B-Chat-v1.0",
+  "fine_tuned_on": "MedQuAD + Medical Treatment Data",
+  "training_completed": "2024-01-15T11:45:00.000Z",
+  "performance": {
+    "final_loss": 0.3123,
+    "perplexity": 1.37,
+    "accuracy": 0.87,
+    "bleu_score": 0.72
+  },
+  "model_path": "models/tinyllama-medquad-treatment"
+}

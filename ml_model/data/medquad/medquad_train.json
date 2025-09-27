@@ -1,0 +1,27 @@
+[
+  {
+    "question": "What are the first-line treatments for hypertension?",
+    "answer": "First-line treatments for hypertension include ACE inhibitors, ARBs, thiazide diuretics, and calcium channel blockers. Lifestyle modifications such as DASH diet, regular exercise, weight management, and sodium restriction are also essential components of hypertension management.",
+    "context": "Hypertension management guidelines"
+  },
+  {
+    "question": "How should diabetes be managed in elderly patients?",
+    "answer": "Diabetes management in elderly patients should focus on individualized glycemic targets, considering comorbidities, cognitive function, and life expectancy. Metformin is typically first-line therapy, with careful monitoring for contraindications such as kidney disease.",
+    "context": "Geriatric diabetes care"
+  },
+  {
+    "question": "What are the treatment options for depression?",
+    "answer": "Treatment options for depression include selective serotonin reuptake inhibitors (SSRIs), serotonin-norepinephrine reuptake inhibitors (SNRIs), cognitive behavioral therapy, interpersonal therapy, and lifestyle modifications including regular exercise and adequate sleep.",
+    "context": "Depression treatment guidelines"
+  },
+  {
+    "question": "How is pneumonia treated in adults?",
+    "answer": "Adult pneumonia treatment depends on severity and setting. Community-acquired pneumonia may be treated with amoxicillin-clavulanate or azithromycin. Hospital-acquired pneumonia requires broader spectrum antibiotics. Supportive care includes oxygen therapy, hydration, and pain management.",
+    "context": "Pneumonia management"
+  },
+  {
+    "question": "What are the side effects of statin therapy?",
+    "answer": "Common side effects of statins include muscle pain, liver enzyme elevation, gastrointestinal symptoms, and increased diabetes risk. Rare but serious side effects include rhabdomyolysis. Regular monitoring of liver function and muscle symptoms is recommended.",
+    "context": "Statin therapy monitoring"
+  }
+]

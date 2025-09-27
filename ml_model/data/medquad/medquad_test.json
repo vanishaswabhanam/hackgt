@@ -1,0 +1,17 @@
+[
+  {
+    "question": "What is the treatment for rheumatoid arthritis?",
+    "answer": "Rheumatoid arthritis treatment includes disease-modifying antirheumatic drugs (DMARDs) such as methotrexate, biologic agents like TNF inhibitors, NSAIDs for symptom relief, corticosteroids for flares, and physical therapy. Early aggressive treatment is key to preventing joint damage.",
+    "context": "Rheumatology guidelines"
+  },
+  {
+    "question": "How is sepsis treated?",
+    "answer": "Sepsis treatment includes early recognition, source control, broad-spectrum antibiotics within 1 hour, fluid resuscitation, vasopressors for hypotension, and supportive care. The Surviving Sepsis Campaign guidelines emphasize early goal-directed therapy.",
+    "context": "Critical care medicine"
+  },
+  {
+    "question": "What are the treatment options for migraine?",
+    "answer": "Migraine treatment includes acute medications like triptans, NSAIDs, and antiemetics. Preventive medications include beta-blockers, anticonvulsants, antidepressants, and CGRP antagonists. Lifestyle modifications and trigger avoidance are important components of management.",
+    "context": "Neurology guidelines"
+  }
+]

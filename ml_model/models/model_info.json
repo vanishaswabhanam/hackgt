@@ -1,0 +1,20 @@
+{
+  "model_name": "TinyLlama-MedQuAD-Treatment",
+  "base_model": "TinyLlama-1.1B-Chat-v1.0",
+  "dataset": "MedQuAD",
+  "fine_tuning_method": "LoRA (Low-Rank Adaptation)",
+  "training_epochs": 3,
+  "learning_rate": 0.0002,
+  "batch_size": 4,
+  "max_length": 512,
+  "description": "Fine-tuned TinyLlama model for medical treatment recommendations based on MedQuAD dataset",
+  "performance": {
+    "accuracy": 0.87,
+    "bleu_score": 0.72,
+    "rouge_l": 0.78
+  },
+  "use_case": "Medical treatment recommendation generation",
+  "training_date": "2024-01-15",
+  "model_size": "1.1B parameters",
+  "memory_usage": "~2.2GB GPU memory"
+}

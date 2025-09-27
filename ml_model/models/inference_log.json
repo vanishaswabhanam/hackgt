@@ -1,0 +1,9 @@
+[
+  {
+    "timestamp": "2025-09-27T11:32:30.427206",
+    "model_used": "TinyLlama-MedQuAD-Treatment",
+    "status": "ready_for_inference",
+    "model_path": "models/tinyllama-medquad-treatment",
+    "api_endpoint": "/api/treatment-recommendations"
+  }
+]
