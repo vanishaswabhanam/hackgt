@@ -197,54 +197,275 @@ async function searchSimilarNotes(query, limit = 5) {
   });
 }
 
-// Function to extract search terms from structured JSON
-function extractSearchTerms(structuredData) {
-  const terms = [];
+// Function to extract search terms from structured JSON with priority
+function extractSearchTermsWithPriority(structuredData) {
+  const priorityTerms = {
+    critical: [], // Condition (most important)
+    high: [],     // Diagnosis tests and treatments
+    medium: [],   // Symptoms and medical history
+    low: []       // Visit motivation and other terms
+  };
   
-  // Extract from visit motivation
-  if (structuredData['visit motivation'] && structuredData['visit motivation'] !== 'None') {
-    terms.push(structuredData['visit motivation']);
-  }
-  
-  // Extract from symptoms
-  if (structuredData.symptoms && Array.isArray(structuredData.symptoms)) {
-    structuredData.symptoms.forEach(symptom => {
-      if (symptom['name of symptom'] && symptom['name of symptom'] !== 'None') {
-        terms.push(symptom['name of symptom']);
-      }
-    });
-  }
-  
-  // Extract from diagnosis tests
+  // CRITICAL PRIORITY: Extract condition from diagnosis tests
   if (structuredData['diagnosis tests'] && Array.isArray(structuredData['diagnosis tests'])) {
     structuredData['diagnosis tests'].forEach(test => {
       if (test.condition && test.condition !== 'None') {
-        terms.push(test.condition);
-      }
-      if (test.test && test.test !== 'None') {
-        terms.push(test.test);
+        priorityTerms.critical.push(test.condition);
       }
     });
   }
   
-  // Extract from treatments
+  // HIGH PRIORITY: Extract diagnostic tests
+  if (structuredData['diagnosis tests'] && Array.isArray(structuredData['diagnosis tests'])) {
+    structuredData['diagnosis tests'].forEach(test => {
+      if (test.test && test.test !== 'None') {
+        priorityTerms.high.push(test.test);
+      }
+    });
+  }
+  
+  // HIGH PRIORITY: Extract treatments
   if (structuredData.treatments && Array.isArray(structuredData.treatments)) {
     structuredData.treatments.forEach(treatment => {
       if (treatment.name && treatment.name !== 'None') {
-        terms.push(treatment.name);
+        priorityTerms.high.push(treatment.name);
       }
       if (treatment['related condition'] && treatment['related condition'] !== 'None') {
-        terms.push(treatment['related condition']);
+        priorityTerms.high.push(treatment['related condition']);
       }
     });
   }
   
-  // Extract from medical history
-  if (structuredData['patient medical history'] && structuredData['patient medical history']['physiological context'] !== 'None') {
-    terms.push(structuredData['patient medical history']['physiological context']);
+  // MEDIUM PRIORITY: Extract from symptoms
+  if (structuredData.symptoms && Array.isArray(structuredData.symptoms)) {
+    structuredData.symptoms.forEach(symptom => {
+      if (symptom['name of symptom'] && symptom['name of symptom'] !== 'None') {
+        priorityTerms.medium.push(symptom['name of symptom']);
+      }
+    });
   }
   
-  return terms.filter(term => term && term.trim().length > 0);
+  // MEDIUM PRIORITY: Extract from medical history
+  if (structuredData['patient medical history'] && structuredData['patient medical history']['physiological context'] !== 'None') {
+    priorityTerms.medium.push(structuredData['patient medical history']['physiological context']);
+  }
+  
+  // LOW PRIORITY: Extract from visit motivation
+  if (structuredData['visit motivation'] && structuredData['visit motivation'] !== 'None') {
+    priorityTerms.low.push(structuredData['visit motivation']);
+  }
+  
+  // Filter out empty terms
+  Object.keys(priorityTerms).forEach(priority => {
+    priorityTerms[priority] = priorityTerms[priority].filter(term => term && term.trim().length > 0);
+  });
+  
+  return priorityTerms;
+}
+
+// Legacy function for backward compatibility
+function extractSearchTerms(structuredData) {
+  const priorityTerms = extractSearchTermsWithPriority(structuredData);
+  return [...priorityTerms.critical, ...priorityTerms.high, ...priorityTerms.medium, ...priorityTerms.low];
+}
+
+// Function to calculate relevance score for an article
+function calculateRelevanceScore(article, priorityTerms) {
+  let score = 0;
+  const title = (article.title || '').toLowerCase();
+  const abstract = (article.abstract || '').toLowerCase();
+  
+  // Critical priority terms (condition) - 5 points each
+  priorityTerms.critical.forEach(term => {
+    const termLower = term.toLowerCase();
+    if (title.includes(termLower)) {
+      score += 5; // Title matches are worth more
+    }
+    if (abstract.includes(termLower)) {
+      score += 3; // Abstract matches
+    }
+  });
+  
+  // High priority terms (diagnostic tests and treatments) - 3 points each
+  priorityTerms.high.forEach(term => {
+    const termLower = term.toLowerCase();
+    if (title.includes(termLower)) {
+      score += 3; // Title matches are worth more
+    }
+    if (abstract.includes(termLower)) {
+      score += 2; // Abstract matches
+    }
+  });
+  
+  // Medium priority terms (symptoms and medical history) - 2 points each
+  priorityTerms.medium.forEach(term => {
+    const termLower = term.toLowerCase();
+    if (title.includes(termLower)) {
+      score += 2;
+    }
+    if (abstract.includes(termLower)) {
+      score += 1;
+    }
+  });
+  
+  // Low priority terms (visit motivation) - 1 point each
+  priorityTerms.low.forEach(term => {
+    const termLower = term.toLowerCase();
+    if (title.includes(termLower)) {
+      score += 1;
+    }
+    if (abstract.includes(termLower)) {
+      score += 0.5;
+    }
+  });
+  
+  return score;
+}
+
+// Function to search PubMed with priority-based ranking
+async function searchPubMedWithPriority(structuredData, maxResults = 10) {
+  try {
+    const priorityTerms = extractSearchTermsWithPriority(structuredData);
+    
+    // Create multiple search queries with different priorities
+    const queries = [];
+    
+    // Critical priority query: Only condition
+    if (priorityTerms.critical.length > 0) {
+      queries.push({
+        query: priorityTerms.critical.join(' AND '),
+        priority: 'critical',
+        weight: 5
+      });
+    }
+    
+    // High priority query: Diagnostic tests and treatments
+    if (priorityTerms.high.length > 0) {
+      queries.push({
+        query: priorityTerms.high.join(' AND '),
+        priority: 'high',
+        weight: 3
+      });
+    }
+    
+    // Medium priority query: Symptoms and medical history
+    if (priorityTerms.medium.length > 0) {
+      queries.push({
+        query: priorityTerms.medium.join(' AND '),
+        priority: 'medium',
+        weight: 2
+      });
+    }
+    
+    // Combined query: All terms
+    const allTerms = [...priorityTerms.critical, ...priorityTerms.high, ...priorityTerms.medium, ...priorityTerms.low];
+    if (allTerms.length > 0) {
+      queries.push({
+        query: allTerms.join(' AND '),
+        priority: 'combined',
+        weight: 1
+      });
+    }
+    
+    if (queries.length === 0) {
+      return { articles: [], total: 0, query: '', message: 'No searchable terms found' };
+    }
+    
+    // Execute searches and collect results
+    const allArticles = new Map(); // Use Map to avoid duplicates by PMID
+    
+    for (const queryObj of queries) {
+      const queryHash = require('crypto').createHash('md5').update(queryObj.query).digest('hex');
+      
+      // Check cache first
+      const cachedResult = await new Promise((resolve) => {
+        db.get('SELECT search_results FROM pubmed_cache WHERE query_hash = ?', [queryHash], (err, row) => {
+          if (err || !row) {
+            resolve(null);
+          } else {
+            resolve(JSON.parse(row.search_results));
+          }
+        });
+      });
+      
+      let articles = [];
+      
+      if (cachedResult) {
+        console.log(`Using cached PubMed results for ${queryObj.priority} query`);
+        articles = cachedResult.articles || [];
+      } else {
+        // Build ESearch URL
+        const esearchUrl = `${NCBI_BASE_URL}/esearch.fcgi?db=pubmed&term=${encodeURIComponent(queryObj.query)}&retmode=json&retmax=${maxResults}&sort=relevance&api_key=${NCBI_API_KEY}`;
+        
+        console.log(`Searching PubMed with ${queryObj.priority} query:`, queryObj.query);
+        
+        // Search for PMIDs
+        const searchResponse = await axios.get(esearchUrl);
+        const searchData = searchResponse.data;
+        
+        if (searchData.esearchresult && searchData.esearchresult.idlist && searchData.esearchresult.idlist.length > 0) {
+          const pmids = searchData.esearchresult.idlist;
+          
+          // Fetch article details
+          const efetchUrl = `${NCBI_BASE_URL}/efetch.fcgi?db=pubmed&id=${pmids.join(',')}&rettype=abstract&retmode=xml`;
+          const fetchResponse = await axios.get(efetchUrl);
+          
+          // Parse XML response
+          articles = parsePubMedXML(fetchResponse.data);
+          
+          // Cache the result
+          const result = {
+            articles: articles,
+            total: parseInt(searchData.esearchresult.count),
+            query: queryObj.query,
+            priority: queryObj.priority
+          };
+          
+          db.run('INSERT OR REPLACE INTO pubmed_cache (query_hash, search_results) VALUES (?, ?)', 
+                 [queryHash, JSON.stringify(result)]);
+        }
+      }
+      
+      // Add articles to the collection with priority weighting
+      articles.forEach(article => {
+        if (!allArticles.has(article.pmid)) {
+          article.relevanceScore = calculateRelevanceScore(article, priorityTerms);
+          article.priorityWeight = queryObj.weight;
+          allArticles.set(article.pmid, article);
+        } else {
+          // Update existing article with higher priority weight if applicable
+          const existing = allArticles.get(article.pmid);
+          if (queryObj.weight > existing.priorityWeight) {
+            existing.priorityWeight = queryObj.weight;
+            existing.relevanceScore = calculateRelevanceScore(article, priorityTerms);
+          }
+        }
+      });
+    }
+    
+    // Convert to array and sort by relevance score
+    const sortedArticles = Array.from(allArticles.values())
+      .sort((a, b) => {
+        // First sort by priority weight, then by relevance score
+        if (b.priorityWeight !== a.priorityWeight) {
+          return b.priorityWeight - a.priorityWeight;
+        }
+        return b.relevanceScore - a.relevanceScore;
+      })
+      .slice(0, maxResults);
+    
+    return {
+      articles: sortedArticles,
+      total: sortedArticles.length,
+      query: queries.map(q => q.query).join(' | '),
+      priorityTerms: priorityTerms,
+      searchStrategy: 'priority-based'
+    };
+    
+  } catch (error) {
+    console.error('Error in priority-based PubMed search:', error);
+    throw error;
+  }
 }
 
 // Function to search PubMed
@@ -581,7 +802,7 @@ app.post('/api/analyze', async (req, res) => {
   }
 });
 
-// New PubMed search endpoint
+// New PubMed search endpoint with priority-based ranking
 app.post('/api/search-pubmed', async (req, res) => {
   try {
     const { structuredData } = req.body;
@@ -590,21 +811,8 @@ app.post('/api/search-pubmed', async (req, res) => {
       return res.status(400).json({ error: 'Structured data is required' });
     }
 
-    // Extract search terms from structured data
-    const searchTerms = extractSearchTerms(structuredData);
-    
-    if (searchTerms.length === 0) {
-      return res.json({
-        success: true,
-        articles: [],
-        total: 0,
-        query: '',
-        message: 'No searchable terms found in structured data'
-      });
-    }
-
-    // Search PubMed
-    const pubmedResults = await searchPubMed(searchTerms, 10);
+    // Use priority-based search for better relevance
+    const pubmedResults = await searchPubMedWithPriority(structuredData, 10);
     
     res.json({
       success: true,
@@ -862,10 +1070,7 @@ async function classifyBrainTumor(imagePath) {
       return;
     }
     
-    const python = spawn('python3', [pythonScript, imagePath], {
-      cwd: path.join(__dirname, '../brain_tumor_classifier'),
-      env: { ...process.env, PATH: process.env.PATH }
-    });
+    const python = spawn('python3', [pythonScript, imagePath]);
     
     let output = '';
     let error = '';
