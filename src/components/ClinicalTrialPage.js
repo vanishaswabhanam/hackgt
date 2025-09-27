@@ -173,7 +173,7 @@ function ClinicalTrialPage() {
         <div className="apollo-header-content">
           <div className="apollo-header-inner">
             {/* Logo/Brand */}
-            <div className="apollo-logo">
+            <div className="apollo-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
               <div className="apollo-logo-text">
                 APOLLO AI
               </div>
