@@ -143,50 +143,163 @@ function HomePage() {
   };
 
   return (
-    <div className="container">
-      <h1 className="page-title">Medical Research Assistant</h1>
-      
-      <div className="input-group">
-        <label htmlFor="textInput">Enter your medical query or symptoms:</label>
-        <textarea
-          id="textInput"
-          value={textInput}
-          onChange={(e) => setTextInput(e.target.value)}
-          placeholder="Describe your symptoms, medical condition, or research question..."
-          rows="6"
-        />
-      </div>
-
-      <div className="file-upload">
-        <label htmlFor="fileInput" className="file-upload-label">
-          <input
-            type="file"
-            id="fileInput"
-            accept="image/*"
-            onChange={handleFileChange}
-          />
-          <div>
-            <h3>📁 Upload Medical Image</h3>
-            <p>Click here to upload an image (X-ray, MRI, CT scan, etc.)</p>
-            {selectedFile && (
-              <p style={{ color: '#4caf50', marginTop: '10px' }}>
-                Selected: {selectedFile.name}
-              </p>
-            )}
+    <div className="modern-homepage">
+      {/* Header */}
+      <header className="modern-header">
+        <div className="header-content">
+          <div className="logo-section">
+            <div className="logo-icon">⚕</div>
+            <div className="logo-text">
+              <h1>MedResearch AI</h1>
+              <p>Advanced Medical Analysis Platform</p>
+            </div>
           </div>
-        </label>
-      </div>
+          <nav className="header-nav">
+            <a href="#research">Research</a>
+            <a href="#analysis">Analysis</a>
+            <a href="#reports">Reports</a>
+            <button className="sign-in-btn">Sign In</button>
+          </nav>
+        </div>
+      </header>
 
-      <div style={{ textAlign: 'center', marginTop: '30px' }}>
-        <button 
-          className="btn" 
-          onClick={handleSubmit}
-          disabled={isLoading}
-        >
-          {isLoading ? 'Analyzing...' : 'Analyze & Get Recommendations'}
-        </button>
-      </div>
+      {/* Main Content */}
+      <main className="modern-main">
+        <div className="hero-section">
+          <div className="feature-badge">
+            <span className="pulse-icon">⚡</span>
+            AI-Powered Medical Research
+          </div>
+          
+          <h2 className="hero-title">
+            Accelerate Medical<br />
+            Discovery
+          </h2>
+          
+          <p className="hero-description">
+            Advanced AI analysis for medical images, research queries, and clinical data. 
+            Empowering healthcare professionals with cutting-edge insights.
+          </p>
+        </div>
 
+        {/* Main Analysis Card */}
+        <div className="analysis-card">
+          {/* Research Query Section */}
+          <div className="query-section">
+            <div className="section-header">
+              <span className="section-icon">🔍</span>
+              <h3>Research Query</h3>
+            </div>
+            <textarea
+              className="modern-textarea"
+              value={textInput}
+              onChange={(e) => setTextInput(e.target.value)}
+              placeholder="Enter your medical research question or describe the analysis you need..."
+              rows="4"
+            />
+          </div>
+
+          {/* File Upload Section */}
+          <div className="upload-section">
+            <div className="section-header">
+              <span className="section-icon">📤</span>
+              <h3>Medical Images & Files</h3>
+            </div>
+            <div className="upload-zone">
+              <input
+                type="file"
+                id="fileInput"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="file-input"
+              />
+              <label htmlFor="fileInput" className="upload-label">
+                <div className="upload-icon">📁</div>
+                <h4>Upload Medical Images</h4>
+                <p>Drag & drop files here, or click to browse</p>
+                <small>Supports: DICOM, PNG, JPG, PDF (max 10MB each)</small>
+                {selectedFile && (
+                  <div className="selected-file">
+                    ✓ {selectedFile.name}
+                  </div>
+                )}
+              </label>
+            </div>
+          </div>
+
+          {/* Start Analysis Button */}
+          <button 
+            className="start-analysis-btn" 
+            onClick={handleSubmit}
+            disabled={isLoading}
+          >
+            <span className="btn-icon">⚡</span>
+            {isLoading ? 'Analyzing...' : 'Start Analysis'}
+          </button>
+        </div>
+
+        {/* Service Cards */}
+        <div className="service-cards">
+          <div className="service-card">
+            <div className="card-icon">🫀</div>
+            <h4>Cardiology</h4>
+            <p>Advanced AI analysis for cardiology research and diagnostics</p>
+          </div>
+          <div className="service-card">
+            <div className="card-icon">🧠</div>
+            <h4>Neurology</h4>
+            <p>Advanced AI analysis for neurology research and diagnostics</p>
+          </div>
+          <div className="service-card">
+            <div className="card-icon">🔬</div>
+            <h4>Pathology</h4>
+            <p>Advanced AI analysis for pathology research and diagnostics</p>
+          </div>
+          <div className="service-card">
+            <div className="card-icon">⚕️</div>
+            <h4>Surgery</h4>
+            <p>Advanced AI analysis for surgery research and diagnostics</p>
+          </div>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="modern-footer">
+        <div className="footer-content">
+          <div className="footer-left">
+            <div className="footer-logo">
+              <span className="logo-icon">⚕</span>
+              <span>MedResearch AI</span>
+            </div>
+            <p>Advancing medical research through artificial intelligence and machine learning.</p>
+          </div>
+          
+          <div className="footer-links">
+            <div className="link-column">
+              <h5>Platform</h5>
+              <a href="#research-tools">Research Tools</a>
+              <a href="#image-analysis">Image Analysis</a>
+              <a href="#data-processing">Data Processing</a>
+            </div>
+            <div className="link-column">
+              <h5>Resources</h5>
+              <a href="#documentation">Documentation</a>
+              <a href="#api-reference">API Reference</a>
+              <a href="#support">Support</a>
+            </div>
+            <div className="link-column">
+              <h5>Company</h5>
+              <a href="#about">About</a>
+              <a href="#privacy">Privacy</a>
+              <a href="#terms">Terms</a>
+            </div>
+          </div>
+        </div>
+        
+        <div className="footer-bottom">
+          <p>© 2024 MedResearch AI. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 }
