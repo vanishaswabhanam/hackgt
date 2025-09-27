@@ -12,16 +12,14 @@ function ResearchPage() {
   // Get structured data from location state or localStorage
   const structuredData = location.state?.structuredData || 
     JSON.parse(localStorage.getItem('lastAnalysis') || '{}');
-  const imageData = location.state?.imageData || 
-    JSON.parse(localStorage.getItem('lastImageAnalysis') || 'null');
 
   useEffect(() => {
     if (structuredData && Object.keys(structuredData).length > 0) {
-      searchPubMed(structuredData, imageData);
+      searchPubMed(structuredData);
     }
   }, []);
 
-  const searchPubMed = async (data, imgData) => {
+  const searchPubMed = async (data) => {
     setIsLoading(true);
     setError(null);
     
@@ -32,8 +30,7 @@ function ResearchPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          structuredData: data,
-          imageData: imgData
+          structuredData: data
         }),
       });
 
@@ -60,7 +57,7 @@ function ResearchPage() {
         'visit motivation': searchQuery,
         symptoms: [{ 'name of symptom': searchQuery }]
       };
-      searchPubMed(mockData, imageData);
+      searchPubMed(mockData);
     }
   };
 
@@ -117,59 +114,15 @@ function ResearchPage() {
               Found {articles.length} relevant articles
             </p>
             
-            {/* Search Strategy Info */}
-            {articles[0] && articles[0].searchStrategy === 'priority-based' && (
-              <div style={{ 
-                backgroundColor: '#283593', 
-                padding: '15px', 
-                borderRadius: '8px', 
-                marginBottom: '20px',
-                border: '1px solid #3949ab'
-              }}>
-                <h4 style={{ color: '#ffffff', marginBottom: '10px' }}>🎯 Priority-Based Search Strategy</h4>
-                <p style={{ color: '#e3f2fd', marginBottom: '8px' }}>
-                  Articles are ranked by relevance with priority given to:
-                </p>
-                <ul style={{ color: '#e3f2fd', marginLeft: '20px' }}>
-                  <li><strong style={{ color: '#9c27b0' }}>Critical Priority:</strong> Condition (5x weight)</li>
-                  <li><strong style={{ color: '#4caf50' }}>High Priority:</strong> Diagnostic tests and treatments (3x weight)</li>
-                  <li><strong style={{ color: '#ff9800' }}>Medium Priority:</strong> Symptoms and medical history (2x weight)</li>
-                  <li><strong style={{ color: '#f44336' }}>Low Priority:</strong> Visit motivation (1x weight)</li>
-                </ul>
-              </div>
-            )}
-            
             {articles.map((article, index) => (
               <div key={article.pmid || index} style={{ 
                 marginBottom: '25px', 
                 padding: '20px', 
                 backgroundColor: '#3949ab', 
                 borderRadius: '8px',
-                border: '1px solid #5c6bc0',
-                position: 'relative'
+                border: '1px solid #5c6bc0'
               }}>
-                {/* Relevance Score Badge */}
-                {article.relevanceScore !== undefined && (
-                  <div style={{
-                    position: 'absolute',
-                    top: '10px',
-                    right: '10px',
-                    backgroundColor: article.priorityWeight >= 5 ? '#9c27b0' : article.priorityWeight >= 3 ? '#4caf50' : article.priorityWeight >= 2 ? '#ff9800' : '#f44336',
-                    color: 'white',
-                    padding: '4px 8px',
-                    borderRadius: '12px',
-                    fontSize: '12px',
-                    fontWeight: 'bold'
-                  }}>
-                    Score: {article.relevanceScore.toFixed(1)}
-                    {article.priorityWeight >= 5 && ' (Critical - Condition)'}
-                    {article.priorityWeight >= 3 && article.priorityWeight < 5 && ' (High Priority)'}
-                    {article.priorityWeight === 2 && ' (Medium Priority)'}
-                    {article.priorityWeight === 1 && ' (Low Priority)'}
-                  </div>
-                )}
-                
-                <h3 style={{ color: '#ffffff', marginBottom: '10px', paddingRight: '120px' }}>
+                <h3 style={{ color: '#ffffff', marginBottom: '10px' }}>
                   {article.title}
                 </h3>
                 

@@ -14,21 +14,66 @@ function PatientProfilePage() {
   const fallbackOriginalText = originalText || localStorage.getItem('lastAnalysisText') || '';
   const fallbackImageData = imageData || JSON.parse(localStorage.getItem('lastImageAnalysis') || 'null');
 
+  // Debug: Log the data to see what we're working with
+  console.log('PatientProfilePage - structuredData:', fallbackStructuredData);
+  console.log('PatientProfilePage - originalText:', fallbackOriginalText);
+
   const handleBackToHome = () => {
     navigate('/');
   };
 
   return (
-    <div className="container">
-      <button className="btn back-btn" onClick={handleBackToHome}>
-        ← Back to Analysis
-      </button>
+    <div className="apollo-homepage">
+      {/* Subtle background pattern */}
+      <div className="apollo-background-pattern"></div>
       
-      <PatientProfile 
-        structuredData={fallbackStructuredData}
-        originalText={fallbackOriginalText}
-        imageData={fallbackImageData}
-      />
+      {/* Flowing lines background */}
+      <div className="flowing-lines-container">
+        <div className="flowing-line line-1"></div>
+        <div className="flowing-line line-2"></div>
+        <div className="flowing-line line-3"></div>
+        <div className="flowing-line line-4"></div>
+        <div className="flowing-line line-5"></div>
+        <div className="flowing-line line-6"></div>
+        <div className="flowing-line line-7"></div>
+        <div className="flowing-line line-8"></div>
+        <div className="flowing-line line-9"></div>
+      </div>
+      
+      {/* Subtle glow effects */}
+      <div className="apollo-glow-1"></div>
+      <div className="apollo-glow-2"></div>
+      
+      {/* Header Navigation */}
+      <header className="apollo-header">
+        <div className="apollo-header-content">
+          <div className="apollo-header-inner">
+            {/* Logo/Brand */}
+            <div className="apollo-logo">
+              <div className="apollo-logo-text">
+                APOLLO AI
+              </div>
+            </div>
+            
+            {/* Back Button */}
+            <div className="apollo-signin-wrapper">
+              <div className="apollo-signin-glow"></div>
+              <button className="apollo-signin-button" onClick={handleBackToHome}>
+                ← Back to Analysis
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      {/* Main content area */}
+      <div className="apollo-main">
+        <PatientProfile 
+          structuredData={fallbackStructuredData}
+          originalText={fallbackOriginalText}
+          imageData={fallbackImageData}
+        />
+      </div>
     </div>
   );
 }

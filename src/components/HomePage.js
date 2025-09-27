@@ -5,6 +5,7 @@ function HomePage() {
   const [textInput, setTextInput] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [result, setResult] = useState(null);
   const navigate = useNavigate();
 
   const handleFileChange = (event) => {
@@ -19,22 +20,24 @@ function HomePage() {
     }
 
     setIsLoading(true);
+    setResult(null);
 
     try {
-      let imageResult = null;
-      let textResult = null;
-
-      // Process image if uploaded
+      // If image is uploaded, classify it first
       if (selectedFile) {
-        imageResult = await classifyImage(selectedFile);
-        if (!imageResult.success) {
-          alert('Error classifying image: ' + (imageResult.error || 'Unknown error'));
+        const imageResult = await classifyImage(selectedFile);
+        if (imageResult.success) {
+          setResult({
+            ...imageResult,
+            type: 'image_classification',
+            filename: selectedFile.name
+          });
           setIsLoading(false);
           return;
         }
       }
 
-      // Process text if provided
+      // If text is provided, analyze it
       if (textInput.trim()) {
         const response = await fetch('http://localhost:5001/api/analyze', {
           method: 'POST',
@@ -49,73 +52,14 @@ function HomePage() {
         const data = await response.json();
         
         if (data.success) {
-          textResult = data;
+          setResult(data);
           // Store structured data for other pages
           localStorage.setItem('lastAnalysis', JSON.stringify(data.structuredData));
           localStorage.setItem('lastAnalysisText', textInput.trim());
         } else {
-          alert('Error analyzing text: ' + (data.error || 'Failed to analyze text'));
-          setIsLoading(false);
-          return;
+          alert('Error: ' + (data.error || 'Failed to analyze text'));
         }
       }
-
-      // Combine results
-      if (imageResult && textResult) {
-        // Both image and text analysis
-        const combinedResult = {
-          type: 'combined_analysis',
-          imageData: imageResult,
-          textData: textResult,
-          structuredData: {
-            ...textResult.structuredData,
-            imaging_analysis: {
-              predicted_class: imageResult.prediction.predicted_class,
-              confidence: imageResult.prediction.confidence,
-              probabilities: imageResult.prediction.probabilities,
-              filename: selectedFile.name
-            }
-          },
-          filename: selectedFile.name
-        };
-        
-        // Navigate to patient profile page
-        navigate('/patient-profile', {
-          state: {
-            structuredData: combinedResult.structuredData,
-            originalText: textInput,
-            imageData: imageResult,
-            resultType: 'combined_analysis'
-          }
-        });
-      } else if (imageResult) {
-        // Only image analysis
-        navigate('/patient-profile', {
-          state: {
-            structuredData: {
-              patient_id: `IMG_${Date.now().toString().slice(-6)}`,
-              primary_diagnosis: imageResult.prediction.predicted_class.replace('_', ' '),
-              symptoms: [`Imaging shows ${imageResult.prediction.predicted_class.replace('_', ' ')} with ${(imageResult.prediction.confidence * 100).toFixed(1)}% confidence`],
-              medical_history: 'Based on medical imaging analysis',
-              imaging_confidence: imageResult.prediction.confidence
-            },
-            originalText: "Medical imaging analysis",
-            imageData: imageResult,
-            resultType: 'image_classification'
-          }
-        });
-      } else if (textResult) {
-        // Only text analysis
-        navigate('/patient-profile', {
-          state: {
-            structuredData: textResult.structuredData,
-            originalText: textInput,
-            imageData: null,
-            resultType: 'text_analysis'
-          }
-        });
-      }
-
     } catch (error) {
       console.error('Error:', error);
       alert('Error connecting to the server. Please make sure the backend is running.');
@@ -142,164 +86,201 @@ function HomePage() {
     }
   };
 
+  // SVG Icons as components
+  const MenuIcon = () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  );
+
+  const SearchIcon = () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="11" cy="11" r="8"></circle>
+      <path d="m21 21-4.35-4.35"></path>
+    </svg>
+  );
+
+  const UploadIcon = () => (
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+      <polyline points="14,2 14,8 20,8"></polyline>
+      <line x1="16" y1="13" x2="8" y2="13"></line>
+      <line x1="16" y1="17" x2="8" y2="17"></line>
+      <polyline points="10,9 9,9 8,9"></polyline>
+    </svg>
+  );
+
+  const FileTextIcon = () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+      <polyline points="14,2 14,8 20,8"></polyline>
+      <line x1="16" y1="13" x2="8" y2="13"></line>
+      <line x1="16" y1="17" x2="8" y2="17"></line>
+    </svg>
+  );
+
+  const BarChart3Icon = () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 3v18h18"></path>
+      <rect width="4" height="7" x="7" y="10" rx="1"></rect>
+      <rect width="4" height="12" x="15" y="5" rx="1"></rect>
+    </svg>
+  );
+
+  const DatabaseIcon = () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+      <path d="M3 5v14a9 3 0 0 0 18 0V5"></path>
+      <path d="M3 12a9 3 0 0 0 18 0"></path>
+    </svg>
+  );
+
   return (
-    <div className="modern-homepage">
-      {/* Header */}
-      <header className="modern-header">
-        <div className="header-content">
-          <div className="logo-section">
-            <div className="logo-icon">⚕</div>
-            <div className="logo-text">
-              <h1>MedResearch AI</h1>
-              <p>Advanced Medical Analysis Platform</p>
+    <div className="apollo-homepage">
+      {/* Subtle background pattern */}
+      <div className="apollo-background-pattern"></div>
+      
+      {/* Flowing lines background */}
+      <div className="flowing-lines-container">
+        <div className="flowing-line line-1"></div>
+        <div className="flowing-line line-2"></div>
+        <div className="flowing-line line-3"></div>
+        <div className="flowing-line line-4"></div>
+        <div className="flowing-line line-5"></div>
+        <div className="flowing-line line-6"></div>
+        <div className="flowing-line line-7"></div>
+        <div className="flowing-line line-8"></div>
+        <div className="flowing-line line-9"></div>
+      </div>
+      
+      {/* Subtle glow effects */}
+      <div className="apollo-glow-1"></div>
+      <div className="apollo-glow-2"></div>
+      
+      {/* Header Navigation */}
+      <header className="apollo-header">
+        <div className="apollo-header-content">
+          <div className="apollo-header-inner">
+            {/* Logo/Brand */}
+            <div className="apollo-logo">
+              <div className="apollo-logo-text">
+                APOLLO AI
+              </div>
             </div>
+            
+            {/* Navigation */}
+            <nav className="apollo-nav">
+              <button className="apollo-nav-button">
+                <FileTextIcon />
+                Research
+              </button>
+              <button className="apollo-nav-button">
+                <BarChart3Icon />
+                Analysis
+              </button>
+              <button className="apollo-nav-button">
+                <DatabaseIcon />
+                Reports
+              </button>
+              <div className="apollo-signin-wrapper">
+                <div className="apollo-signin-glow"></div>
+                <button className="apollo-signin-button">
+                  Sign In
+                </button>
+              </div>
+            </nav>
           </div>
-          <nav className="header-nav">
-            <a href="#research">Research</a>
-            <a href="#analysis">Analysis</a>
-            <a href="#reports">Reports</a>
-            <button className="sign-in-btn">Sign In</button>
-          </nav>
         </div>
       </header>
-
-      {/* Main Content */}
-      <main className="modern-main">
-        <div className="hero-section">
-          <div className="feature-badge">
-            <span className="pulse-icon">⚡</span>
-            AI-Powered Medical Research
-          </div>
-          
-          <h2 className="hero-title">
-            Accelerate Medical<br />
-            Discovery
-          </h2>
-          
-          <p className="hero-description">
-            Advanced AI analysis for medical images, research queries, and clinical data. 
-            Empowering healthcare professionals with cutting-edge insights.
-          </p>
-        </div>
-
-        {/* Main Analysis Card */}
-        <div className="analysis-card">
-          {/* Research Query Section */}
-          <div className="query-section">
-            <div className="section-header">
-              <span className="section-icon">🔍</span>
-              <h3>Research Query</h3>
-            </div>
-            <textarea
-              className="modern-textarea"
-              value={textInput}
-              onChange={(e) => setTextInput(e.target.value)}
-              placeholder="Enter your medical research question or describe the analysis you need..."
-              rows="4"
-            />
-          </div>
-
-          {/* File Upload Section */}
-          <div className="upload-section">
-            <div className="section-header">
-              <span className="section-icon">📤</span>
-              <h3>Medical Images & Files</h3>
-            </div>
-            <div className="upload-zone">
-              <input
-                type="file"
-                id="fileInput"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="file-input"
+      
+      {/* Main content area */}
+      <div className="apollo-main">
+        <div className="apollo-content">
+          {/* Doctor Notes Section */}
+          <div className="apollo-section">
+            <div className="apollo-section-glow"></div>
+            <div className="apollo-section-content">
+              <div className="apollo-section-header">
+                <div className="apollo-section-icon">
+                  <SearchIcon />
+                </div>
+                <label htmlFor="doctor-notes" className="apollo-section-label">
+                  Doctor Notes
+                </label>
+              </div>
+              <textarea
+                id="doctor-notes"
+                value={textInput}
+                onChange={(e) => setTextInput(e.target.value)}
+                placeholder="Enter in patient details and diagnoses..."
+                className="apollo-textarea"
               />
-              <label htmlFor="fileInput" className="upload-label">
-                <div className="upload-icon">📁</div>
-                <h4>Upload Medical Images</h4>
-                <p>Drag & drop files here, or click to browse</p>
-                <small>Supports: DICOM, PNG, JPG, PDF (max 10MB each)</small>
+            </div>
+          </div>
+          
+          {/* Medical Images & Files Section */}
+          <div className="apollo-section">
+            <div className="apollo-section-glow"></div>
+            <div className="apollo-section-content">
+              <div className="apollo-section-header">
+                <div className="apollo-section-icon">
+                  <UploadIcon />
+                </div>
+                <label className="apollo-section-label">
+                  Medical Images & Files
+                </label>
+              </div>
+              <div className="apollo-upload-zone">
+                <UploadIcon className="apollo-upload-icon" />
+                <p className="apollo-upload-title">
+                  Upload medical images, scans, or research files
+                </p>
+                <p className="apollo-upload-description">
+                  DICOM, PNG, JPG, PDF up to 50MB • Drag and drop or click to browse
+                </p>
                 {selectedFile && (
-                  <div className="selected-file">
-                    ✓ {selectedFile.name}
+                  <div style={{ marginTop: '16px', padding: '8px 16px', background: '#e8f5e8', color: '#2d5a2d', borderRadius: '6px', fontSize: '14px', fontWeight: '500' }}>
+                    Selected: {selectedFile.name}
                   </div>
                 )}
-              </label>
+                <input
+                  type="file"
+                  accept="image/*,.dicom,.dcm,.pdf"
+                  className="apollo-upload-input"
+                  onChange={handleFileChange}
+                  multiple
+                />
+              </div>
+              
+              <button 
+                className="apollo-button" 
+                onClick={async () => {
+                  await handleSubmit();
+                  if (textInput.trim() || selectedFile) {
+                    navigate('/patient-profile');
+                  }
+                }}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <div className="apollo-loading">
+                    <div className="apollo-spinner"></div>
+                    Processing...
+                  </div>
+                ) : (
+                  <>
+                    <SearchIcon />
+                    Analyze Patient Data
+                  </>
+                )}
+              </button>
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* Start Analysis Button */}
-          <button 
-            className="start-analysis-btn" 
-            onClick={handleSubmit}
-            disabled={isLoading}
-          >
-            <span className="btn-icon">⚡</span>
-            {isLoading ? 'Analyzing...' : 'Start Analysis'}
-          </button>
-        </div>
-
-        {/* Service Cards */}
-        <div className="service-cards">
-          <div className="service-card">
-            <div className="card-icon">🫀</div>
-            <h4>Cardiology</h4>
-            <p>Advanced AI analysis for cardiology research and diagnostics</p>
-          </div>
-          <div className="service-card">
-            <div className="card-icon">🧠</div>
-            <h4>Neurology</h4>
-            <p>Advanced AI analysis for neurology research and diagnostics</p>
-          </div>
-          <div className="service-card">
-            <div className="card-icon">🔬</div>
-            <h4>Pathology</h4>
-            <p>Advanced AI analysis for pathology research and diagnostics</p>
-          </div>
-          <div className="service-card">
-            <div className="card-icon">⚕️</div>
-            <h4>Surgery</h4>
-            <p>Advanced AI analysis for surgery research and diagnostics</p>
-          </div>
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="modern-footer">
-        <div className="footer-content">
-          <div className="footer-left">
-            <div className="footer-logo">
-              <span className="logo-icon">⚕</span>
-              <span>MedResearch AI</span>
-            </div>
-            <p>Advancing medical research through artificial intelligence and machine learning.</p>
-          </div>
-          
-          <div className="footer-links">
-            <div className="link-column">
-              <h5>Platform</h5>
-              <a href="#research-tools">Research Tools</a>
-              <a href="#image-analysis">Image Analysis</a>
-              <a href="#data-processing">Data Processing</a>
-            </div>
-            <div className="link-column">
-              <h5>Resources</h5>
-              <a href="#documentation">Documentation</a>
-              <a href="#api-reference">API Reference</a>
-              <a href="#support">Support</a>
-            </div>
-            <div className="link-column">
-              <h5>Company</h5>
-              <a href="#about">About</a>
-              <a href="#privacy">Privacy</a>
-              <a href="#terms">Terms</a>
-            </div>
-          </div>
-        </div>
-        
-        <div className="footer-bottom">
-          <p>© 2024 MedResearch AI. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   );
 }
