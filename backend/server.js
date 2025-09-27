@@ -6,7 +6,7 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const axios = require('axios');
-require('dotenv').config();
+require('dotenv').config({ path: './config.env' });
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -18,7 +18,7 @@ app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
 // Initialize Gemini AI
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || 'AIzaSyCTKecnUk1-OtyI3gqlHe1dFpf5xgQ8cOA');
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || 'AIzaSyBlKFr4_psbeN7QpmlZpnSctCs7FlvNtfE');
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
 // NCBI E-utilities configuration
