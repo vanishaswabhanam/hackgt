@@ -37,6 +37,8 @@ function HomePage() {
       
       if (data.success) {
         setResult(data);
+        // Store structured data for other pages
+        localStorage.setItem('lastAnalysis', JSON.stringify(data.structuredData));
         // Don't navigate away - show result on same page
       } else {
         alert('Error: ' + (data.error || 'Failed to analyze text'));
