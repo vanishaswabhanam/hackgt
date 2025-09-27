@@ -197,9 +197,15 @@ const PatientProfile = ({ structuredData, originalText, imageData }) => {
           </div>
         </div>
 
+<<<<<<< Updated upstream
         {/* Imaging Results - Only show if there's actual image data */}
         {imageData && imageData !== null && imageData !== 'null' && (imageData.filename || imageData.prediction) && (
           <div className="apollo-section apollo-section-wide">
+=======
+        {/* Imaging Results */}
+        {(imageData || structuredData.imaging_analysis) && (
+          <div className="apollo-section">
+>>>>>>> Stashed changes
             <div className="apollo-section-glow"></div>
             <div className="apollo-section-content">
               <div className="apollo-section-header">
@@ -214,35 +220,58 @@ const PatientProfile = ({ structuredData, originalText, imageData }) => {
                   Imaging Analysis
                 </label>
               </div>
+<<<<<<< Updated upstream
               <div className="apollo-imaging-results-wide">
                 <div className="apollo-imaging-item">
                   <span className="apollo-imaging-label">Image Type:</span>
                   <span className="apollo-imaging-value">
                     {imageData?.filename || 'Medical Image'}
+=======
+              <div className="apollo-imaging-results">
+                <div className="apollo-imaging-item">
+                  <span className="apollo-imaging-label">Image Type:</span>
+                  <span className="apollo-imaging-value">
+                    {imageData?.filename || structuredData.imaging_analysis?.filename || 'Medical Image'}
+>>>>>>> Stashed changes
                   </span>
                 </div>
                 <div className="apollo-imaging-item">
                   <span className="apollo-imaging-label">Classification:</span>
                   <span className="apollo-imaging-value highlight">
+<<<<<<< Updated upstream
                     {(imageData?.prediction?.predicted_class || 'N/A').replace('_', ' ')}
+=======
+                    {(imageData?.prediction?.predicted_class || structuredData.imaging_analysis?.predicted_class || 'N/A').replace('_', ' ')}
+>>>>>>> Stashed changes
                   </span>
                 </div>
                 <div className="apollo-imaging-item">
                   <span className="apollo-imaging-label">Confidence:</span>
                   <span className="apollo-imaging-value confidence">
+<<<<<<< Updated upstream
                     {imageData?.prediction?.confidence ? 
                       `${(imageData.prediction.confidence * 100).toFixed(1)}%` : 
                       'N/A'
                     }
+=======
+                    {((imageData?.prediction?.confidence || structuredData.imaging_analysis?.confidence || 0) * 100).toFixed(1)}%
+>>>>>>> Stashed changes
                   </span>
                 </div>
               </div>
               
               {/* Show probability distribution if available */}
+<<<<<<< Updated upstream
               {imageData?.prediction?.probabilities && (
                 <div className="apollo-probability-distribution">
                   <h4>Probability Distribution:</h4>
                   {Object.entries(imageData.prediction.probabilities).map(([className, prob]) => (
+=======
+              {(imageData?.prediction?.probabilities || structuredData.imaging_analysis?.probabilities) && (
+                <div className="apollo-probability-distribution">
+                  <h4>Probability Distribution:</h4>
+                  {Object.entries(imageData?.prediction?.probabilities || structuredData.imaging_analysis?.probabilities).map(([className, prob]) => (
+>>>>>>> Stashed changes
                     <div key={className} className="apollo-probability-item">
                       <div className="apollo-probability-label">
                         <span>{className.replace('_', ' ')}</span>
@@ -253,7 +282,11 @@ const PatientProfile = ({ structuredData, originalText, imageData }) => {
                           className="apollo-probability-fill"
                           style={{
                             width: `${prob * 100}%`,
+<<<<<<< Updated upstream
                             backgroundColor: className === imageData.prediction.predicted_class ? '#4caf50' : '#3949ab'
+=======
+                            backgroundColor: className === (imageData?.prediction?.predicted_class || structuredData.imaging_analysis?.predicted_class) ? '#4caf50' : '#3949ab'
+>>>>>>> Stashed changes
                           }}
                         />
                       </div>
@@ -388,6 +421,7 @@ const PatientProfile = ({ structuredData, originalText, imageData }) => {
             </div>
           </div>
         )}
+      </div>
       </div>
 
       <div className="apollo-profile-footer">
