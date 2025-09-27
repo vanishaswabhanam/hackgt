@@ -1,0 +1,15 @@
+{
+  "model_type": "efficientnet",
+  "num_classes": 3,
+  "pretrained": true,
+  "epochs": 15,
+  "batch_size": 16,
+  "learning_rate": 0.001,
+  "weight_decay": 0.0001,
+  "optimizer": "adam",
+  "device": "mps",
+  "data_dir": "data/Brain_Cancer",
+  "num_workers": 4,
+  "save_frequency": 5,
+  "early_stopping_patience": 10
+}

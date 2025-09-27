@@ -97,7 +97,7 @@ function TreatmentPathwayPage() {
         ← Back to Results
       </button>
       
-      <h1 className="page-title">AI-Generated Treatment Pathway Recommendation</h1>
+      <h1 className="page-title">Treatment Pathway Recommendation</h1>
       
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
         {recommendations?.immediateActions && (

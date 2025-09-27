@@ -1,0 +1,12 @@
+{
+  "model_path": "trained_models/demo_model.pth",
+  "model_type": "efficientnet",
+  "confidence_threshold": 0.5,
+  "batch_size": 1,
+  "device": "auto",
+  "class_names": [
+    "Brain_Glioma",
+    "Brain_Menin",
+    "Brain_Tumor"
+  ]
+}
