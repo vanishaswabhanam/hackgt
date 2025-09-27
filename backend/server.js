@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || 'AIzaSyCTKecnUk1-OtyI3gqlHe1dFpf5xgQ8cOA');
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" });
+const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
 // NCBI E-utilities configuration
 const NCBI_BASE_URL = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils';

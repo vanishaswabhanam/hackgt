@@ -23,7 +23,7 @@ function ClinicalTrialPage() {
     if (structuredData && Object.keys(structuredData).length > 0) {
       searchTrials();
     }
-  }, []);
+  }, [structuredData]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const searchTrials = async () => {
     setIsLoading(true);
