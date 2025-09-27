@@ -18,6 +18,8 @@ function ClinicalTrialPage() {
   // Get structured data from location state or localStorage
   const structuredData = location.state?.structuredData || 
     JSON.parse(localStorage.getItem('lastAnalysis') || '{}');
+  const imageData = location.state?.imageData || 
+    JSON.parse(localStorage.getItem('lastImageAnalysis') || 'null');
 
   useEffect(() => {
     if (structuredData && Object.keys(structuredData).length > 0) {
@@ -38,6 +40,7 @@ function ClinicalTrialPage() {
         },
         body: JSON.stringify({
           structuredData,
+          imageData,
           status: 'Recruiting',
           filters
         }),
@@ -51,6 +54,7 @@ function ClinicalTrialPage() {
         },
         body: JSON.stringify({
           structuredData,
+          imageData,
           status: 'Active',
           filters
         }),

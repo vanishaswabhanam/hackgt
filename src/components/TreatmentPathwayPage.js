@@ -13,6 +13,8 @@ function TreatmentPathwayPage() {
     JSON.parse(localStorage.getItem('lastAnalysis') || '{}');
   const originalText = location.state?.originalText || 
     localStorage.getItem('lastAnalysisText') || '';
+  const imageData = location.state?.imageData || 
+    JSON.parse(localStorage.getItem('lastImageAnalysis') || 'null');
 
   useEffect(() => {
     if (structuredData && Object.keys(structuredData).length > 0) {
@@ -35,7 +37,8 @@ function TreatmentPathwayPage() {
         },
         body: JSON.stringify({
           structuredData: structuredData,
-          originalText: originalText
+          originalText: originalText,
+          imageData: imageData
         }),
       });
 
