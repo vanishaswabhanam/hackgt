@@ -1,0 +1,12 @@
+{
+  "dataset_name": "Brain Cancer MRI Dataset",
+  "total_images": 6056,
+  "classes": {
+    "Brain_Glioma": 2004,
+    "Brain_Menin": 2004,
+    "Brain_Tumor": 2048
+  },
+  "image_size": "512x512",
+  "format": "MRI scans",
+  "description": "Brain tumor MRI classification dataset with 3 classes"
+}
