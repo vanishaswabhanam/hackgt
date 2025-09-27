@@ -862,7 +862,10 @@ async function classifyBrainTumor(imagePath) {
       return;
     }
     
-    const python = spawn('python3', [pythonScript, imagePath]);
+    const python = spawn('python3', [pythonScript, imagePath], {
+      cwd: path.join(__dirname, '../brain_tumor_classifier'),
+      env: { ...process.env, PATH: process.env.PATH }
+    });
     
     let output = '';
     let error = '';
