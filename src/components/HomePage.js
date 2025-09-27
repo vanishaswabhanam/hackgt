@@ -259,7 +259,13 @@ function HomePage() {
                 onClick={async () => {
                   await handleSubmit();
                   if (textInput.trim() || selectedFile) {
-                    navigate('/patient-profile');
+                    // Pass image data through navigation state
+                    const imageData = selectedFile ? result : null;
+                    navigate('/patient-profile', { 
+                      state: { 
+                        imageData: imageData 
+                      } 
+                    });
                   }
                 }}
                 disabled={isLoading}

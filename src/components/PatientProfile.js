@@ -1,16 +1,16 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function PatientProfile({ structuredData, originalText, imageData, onNextSteps }) {
+const PatientProfile = ({ structuredData, originalText, imageData }) => {
   const navigate = useNavigate();
 
   // Debug: Log the data to see what we're working with
   console.log('PatientProfile - structuredData:', structuredData);
   console.log('PatientProfile - originalText:', originalText);
-  console.log('PatientProfile - patientInfo:', structuredData['patient information']);
-  console.log('PatientProfile - symptoms:', structuredData.symptoms);
-  console.log('PatientProfile - diagnosisTests:', structuredData['diagnosis tests']);
-  console.log('PatientProfile - treatments:', structuredData.treatments);
+  console.log('PatientProfile - imageData:', imageData);
+  console.log('PatientProfile - imageData type:', typeof imageData);
+  console.log('PatientProfile - imageData filename:', imageData?.filename);
+  console.log('PatientProfile - imageData prediction:', imageData?.prediction);
 
   // Extract patient information from structured data
   const patientInfo = structuredData['patient information'] || {};
@@ -19,14 +19,13 @@ function PatientProfile({ structuredData, originalText, imageData, onNextSteps }
   const treatments = structuredData.treatments || [];
   const medicalHistory = structuredData['patient medical history'] || {};
 
+  console.log('PatientProfile - patientInfo:', patientInfo);
+  console.log('PatientProfile - symptoms:', symptoms);
+  console.log('PatientProfile - diagnosisTests:', diagnosisTests);
+  console.log('PatientProfile - treatments:', treatments);
+  console.log('PatientProfile - medicalHistory:', medicalHistory);
+
   const handleNextSteps = () => {
-    // Store data for other pages
-    localStorage.setItem('lastAnalysis', JSON.stringify(structuredData));
-    localStorage.setItem('lastAnalysisText', originalText);
-    if (imageData) {
-      localStorage.setItem('lastImageAnalysis', JSON.stringify(imageData));
-    }
-    
     // Navigate to results page
     navigate('/results');
   };
@@ -41,7 +40,7 @@ function PatientProfile({ structuredData, originalText, imageData, onNextSteps }
       <div className="apollo-profile-sections">
         {/* Debug: Raw Data Display */}
         {Object.keys(structuredData).length > 0 && (
-          <div className="apollo-section">
+          <div className="apollo-section apollo-section-wide">
             <div className="apollo-section-glow"></div>
             <div className="apollo-section-content">
               <div className="apollo-section-header">
@@ -63,7 +62,7 @@ function PatientProfile({ structuredData, originalText, imageData, onNextSteps }
         )}
 
         {/* Patient Demographics */}
-        <div className="apollo-section">
+        <div className="apollo-section apollo-section-wide">
           <div className="apollo-section-glow"></div>
           <div className="apollo-section-content">
             <div className="apollo-section-header">
@@ -77,7 +76,7 @@ function PatientProfile({ structuredData, originalText, imageData, onNextSteps }
                 Patient Information
               </label>
             </div>
-            <div className="apollo-info-grid">
+            <div className="apollo-info-grid-wide">
               <div className="apollo-info-item">
                 <span className="apollo-info-label">Patient ID:</span>
                 <span className="apollo-info-value">{structuredData.patient_id || 'Generated ID: ' + Date.now().toString().slice(-6)}</span>
@@ -111,7 +110,7 @@ function PatientProfile({ structuredData, originalText, imageData, onNextSteps }
         </div>
 
         {/* Medical Condition */}
-        <div className="apollo-section">
+        <div className="apollo-section apollo-section-wide">
           <div className="apollo-section-glow"></div>
           <div className="apollo-section-content">
             <div className="apollo-section-header">
@@ -140,117 +139,135 @@ function PatientProfile({ structuredData, originalText, imageData, onNextSteps }
                 </div>
               )}
 
-            {/* Symptoms */}
-            {symptoms.length > 0 && (
-              <div className="apollo-symptoms-list">
-                <span className="apollo-symptoms-label">Symptoms:</span>
-                <div className="apollo-symptoms-tags">
-                  {symptoms.map((symptom, index) => {
-                    // Handle both string symptoms and complex symptom objects
-                    if (typeof symptom === 'string') {
-                      return <span key={index} className="apollo-symptom-tag">{symptom}</span>;
-                    } else if (typeof symptom === 'object' && symptom !== null) {
-                      // Extract the main symptom name from the object
-                      const symptomName = symptom['name of symptom'] || 
-                                        symptom.name || 
-                                        symptom.symptom || 
-                                        Object.keys(symptom)[0] || 
-                                        'Symptom';
-                      return <span key={index} className="apollo-symptom-tag">{symptomName}</span>;
-                    }
-                    return null;
-                  })}
-                </div>
-                
-                {/* Detailed symptoms view for complex objects */}
-                {symptoms.some(symptom => typeof symptom === 'object' && symptom !== null) && (
-                  <div className="detailed-symptoms">
-                    <details className="symptoms-details">
-                      <summary className="symptoms-summary">View detailed symptom information</summary>
-                      <div className="symptoms-detail-content">
-                        {symptoms.map((symptom, index) => {
-                          if (typeof symptom === 'object' && symptom !== null) {
-                            return (
-                              <div key={index} className="symptom-detail-item">
-                                <h4 className="symptom-detail-title">
-                                  {symptom['name of symptom'] || symptom.name || symptom.symptom || 'Symptom'}
-                                </h4>
-                                <div className="symptom-detail-properties">
-                                  {Object.entries(symptom).map(([key, value]) => (
-                                    <div key={key} className="symptom-property">
-                                      <span className="property-key">{key}:</span>
-                                      <span className="property-value">{value}</span>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            );
-                          }
-                          return null;
-                        })}
-                      </div>
-                    </details>
+              {/* Symptoms */}
+              {symptoms.length > 0 && (
+                <div className="apollo-symptoms-list">
+                  <span className="apollo-symptoms-label">Symptoms:</span>
+                  <div className="apollo-symptoms-tags">
+                    {symptoms.map((symptom, index) => {
+                      // Handle both string symptoms and complex symptom objects
+                      if (typeof symptom === 'string') {
+                        return <span key={index} className="apollo-symptom-tag">{symptom}</span>;
+                      } else if (typeof symptom === 'object' && symptom !== null) {
+                        // Extract the main symptom name from the object
+                        const symptomName = symptom['name of symptom'] || 
+                                          symptom.name || 
+                                          symptom.symptom || 
+                                          Object.keys(symptom)[0] || 
+                                          'Symptom';
+                        return <span key={index} className="apollo-symptom-tag">{symptomName}</span>;
+                      }
+                      return null;
+                    })}
                   </div>
-                )}
-              </div>
-            )}
+                  
+                  {/* Detailed symptoms view for complex objects */}
+                  {symptoms.some(symptom => typeof symptom === 'object' && symptom !== null) && (
+                    <div className="apollo-detailed-symptoms">
+                      <details className="apollo-symptoms-details">
+                        <summary className="apollo-symptoms-summary">View detailed symptom information</summary>
+                        <div className="apollo-symptoms-detail-content">
+                          {symptoms.map((symptom, index) => {
+                            if (typeof symptom === 'object' && symptom !== null) {
+                              return (
+                                <div key={index} className="apollo-symptom-detail-item">
+                                  <h4 className="apollo-symptom-detail-title">
+                                    {symptom['name of symptom'] || symptom.name || symptom.symptom || 'Symptom'}
+                                  </h4>
+                                  <div className="apollo-symptom-detail-properties">
+                                    {Object.entries(symptom).map(([key, value]) => (
+                                      <div key={key} className="apollo-symptom-property">
+                                        <span className="apollo-property-key">{key}:</span>
+                                        <span className="apollo-property-value">{value}</span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              );
+                            }
+                            return null;
+                          })}
+                        </div>
+                      </details>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Imaging Results */}
-        {(imageData || structuredData.imaging_analysis) && (
-          <div className="profile-section">
-            <h3>🔬 Imaging Analysis</h3>
-            <div className="imaging-results">
-              <div className="imaging-item">
-                <span className="imaging-label">Image Type:</span>
-                <span className="imaging-value">
-                  {imageData?.filename || structuredData.imaging_analysis?.filename || 'Medical Image'}
-                </span>
+        {/* Imaging Results - Only show if there's actual image data */}
+        {imageData && imageData !== null && imageData !== 'null' && (imageData.filename || imageData.prediction) && (
+          <div className="apollo-section apollo-section-wide">
+            <div className="apollo-section-glow"></div>
+            <div className="apollo-section-content">
+              <div className="apollo-section-header">
+                <div className="apollo-section-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21,15 16,10 5,21"></polyline>
+                  </svg>
+                </div>
+                <label className="apollo-section-label">
+                  Imaging Analysis
+                </label>
               </div>
-              <div className="imaging-item">
-                <span className="imaging-label">Classification:</span>
-                <span className="imaging-value highlight">
-                  {(imageData?.prediction?.predicted_class || structuredData.imaging_analysis?.predicted_class || 'N/A').replace('_', ' ')}
-                </span>
+              <div className="apollo-imaging-results-wide">
+                <div className="apollo-imaging-item">
+                  <span className="apollo-imaging-label">Image Type:</span>
+                  <span className="apollo-imaging-value">
+                    {imageData?.filename || 'Medical Image'}
+                  </span>
+                </div>
+                <div className="apollo-imaging-item">
+                  <span className="apollo-imaging-label">Classification:</span>
+                  <span className="apollo-imaging-value highlight">
+                    {(imageData?.prediction?.predicted_class || 'N/A').replace('_', ' ')}
+                  </span>
+                </div>
+                <div className="apollo-imaging-item">
+                  <span className="apollo-imaging-label">Confidence:</span>
+                  <span className="apollo-imaging-value confidence">
+                    {imageData?.prediction?.confidence ? 
+                      `${(imageData.prediction.confidence * 100).toFixed(1)}%` : 
+                      'N/A'
+                    }
+                  </span>
+                </div>
               </div>
-              <div className="imaging-item">
-                <span className="imaging-label">Confidence:</span>
-                <span className="imaging-value confidence">
-                  {((imageData?.prediction?.confidence || structuredData.imaging_analysis?.confidence || 0) * 100).toFixed(1)}%
-                </span>
-              </div>
+              
+              {/* Show probability distribution if available */}
+              {imageData?.prediction?.probabilities && (
+                <div className="apollo-probability-distribution">
+                  <h4>Probability Distribution:</h4>
+                  {Object.entries(imageData.prediction.probabilities).map(([className, prob]) => (
+                    <div key={className} className="apollo-probability-item">
+                      <div className="apollo-probability-label">
+                        <span>{className.replace('_', ' ')}</span>
+                        <span>{(prob * 100).toFixed(1)}%</span>
+                      </div>
+                      <div className="apollo-probability-bar">
+                        <div 
+                          className="apollo-probability-fill"
+                          style={{
+                            width: `${prob * 100}%`,
+                            backgroundColor: className === imageData.prediction.predicted_class ? '#4caf50' : '#3949ab'
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-            
-            {/* Show probability distribution if available */}
-            {(imageData?.prediction?.probabilities || structuredData.imaging_analysis?.probabilities) && (
-              <div className="probability-distribution">
-                <h4>Probability Distribution:</h4>
-                {Object.entries(imageData?.prediction?.probabilities || structuredData.imaging_analysis?.probabilities).map(([className, prob]) => (
-                  <div key={className} className="probability-item">
-                    <div className="probability-label">
-                      <span>{className.replace('_', ' ')}</span>
-                      <span>{(prob * 100).toFixed(1)}%</span>
-                    </div>
-                    <div className="probability-bar">
-                      <div 
-                        className="probability-fill"
-                        style={{
-                          width: `${prob * 100}%`,
-                          backgroundColor: className === (imageData?.prediction?.predicted_class || structuredData.imaging_analysis?.predicted_class) ? '#4caf50' : '#3949ab'
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         )}
 
-        {/* Diagnosis Tests */}
-        {diagnosisTests.length > 0 && (
-          <div className="apollo-section">
+        {/* Diagnostic Tests - Only show if there's image data */}
+        {imageData && imageData !== null && imageData !== 'null' && (imageData.filename || imageData.prediction) && diagnosisTests.length > 0 && (
+          <div className="apollo-section apollo-section-wide">
             <div className="apollo-section-glow"></div>
             <div className="apollo-section-content">
               <div className="apollo-section-header">
@@ -263,7 +280,7 @@ function PatientProfile({ structuredData, originalText, imageData, onNextSteps }
                   Diagnostic Tests
                 </label>
               </div>
-              <div className="apollo-tests-grid">
+              <div className="apollo-tests-grid-wide">
                 {diagnosisTests.map((test, index) => (
                   <div key={index} className="apollo-test-item">
                     <div className="apollo-test-condition">
@@ -283,7 +300,7 @@ function PatientProfile({ structuredData, originalText, imageData, onNextSteps }
 
         {/* Treatments */}
         {treatments.length > 0 && (
-          <div className="apollo-section">
+          <div className="apollo-section apollo-section-wide">
             <div className="apollo-section-glow"></div>
             <div className="apollo-section-content">
               <div className="apollo-section-header">
@@ -296,7 +313,7 @@ function PatientProfile({ structuredData, originalText, imageData, onNextSteps }
                   Current Treatments
                 </label>
               </div>
-              <div className="apollo-treatments-grid">
+              <div className="apollo-treatments-grid-wide">
                 {treatments.map((treatment, index) => (
                   <div key={index} className="apollo-treatment-item">
                     <div className="apollo-treatment-name">
@@ -316,7 +333,7 @@ function PatientProfile({ structuredData, originalText, imageData, onNextSteps }
 
         {/* Medical History */}
         {medicalHistory && Object.keys(medicalHistory).length > 0 && (
-          <div className="apollo-section">
+          <div className="apollo-section apollo-section-wide">
             <div className="apollo-section-glow"></div>
             <div className="apollo-section-content">
               <div className="apollo-section-header">
@@ -330,7 +347,7 @@ function PatientProfile({ structuredData, originalText, imageData, onNextSteps }
                   Medical History
                 </label>
               </div>
-              <div className="apollo-history-grid">
+              <div className="apollo-history-grid-wide">
                 {medicalHistory['physiological context'] && (
                   <div className="apollo-history-item">
                     <span className="apollo-history-label">Physiological Context:</span>
@@ -350,7 +367,7 @@ function PatientProfile({ structuredData, originalText, imageData, onNextSteps }
 
         {/* Treatment Recommendations */}
         {structuredData.treatment_recommendations && (
-          <div className="apollo-section">
+          <div className="apollo-section apollo-section-wide">
             <div className="apollo-section-glow"></div>
             <div className="apollo-section-content">
               <div className="apollo-section-header">
@@ -381,6 +398,6 @@ function PatientProfile({ structuredData, originalText, imageData, onNextSteps }
       </div>
     </div>
   );
-}
+};
 
 export default PatientProfile;

@@ -1631,6 +1631,40 @@ code {
   margin-top: 20px;
 }
 
+/* Apollo Wide Sections */
+.apollo-section-wide {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.apollo-info-grid-wide {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.apollo-imaging-results-wide {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.apollo-tests-grid-wide, .apollo-treatments-grid-wide {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.apollo-history-grid-wide {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
 .apollo-info-item {
   background: rgb(248, 250, 252);
   border: 1px solid rgb(226, 232, 240);
@@ -1832,6 +1866,172 @@ code {
   color: rgb(15, 23, 42);
   line-height: 1.6;
   border-left: 4px solid rgb(37, 99, 235);
+}
+
+/* Apollo Imaging Results */
+.apollo-imaging-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.apollo-imaging-item {
+  background: white;
+  border: 1px solid rgb(226, 232, 240);
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.apollo-imaging-item:hover {
+  border-color: rgb(37, 99, 235);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+}
+
+.apollo-imaging-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgb(100, 116, 139);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.apollo-imaging-value {
+  font-size: 16px;
+  color: rgb(15, 23, 42);
+  font-weight: 500;
+}
+
+.apollo-imaging-value.highlight {
+  background: linear-gradient(135deg, rgb(37, 99, 235), rgb(8, 145, 178));
+  color: white;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.apollo-imaging-value.confidence {
+  color: rgb(34, 197, 94);
+  font-weight: 600;
+}
+
+/* Apollo Probability Distribution */
+.apollo-probability-distribution {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgb(226, 232, 240);
+}
+
+.apollo-probability-distribution h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgb(15, 23, 42);
+  margin-bottom: 16px;
+}
+
+.apollo-probability-item {
+  margin-bottom: 12px;
+}
+
+.apollo-probability-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: rgb(71, 85, 105);
+}
+
+.apollo-probability-bar {
+  height: 8px;
+  background: rgb(226, 232, 240);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.apollo-probability-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
+/* Apollo Detailed Symptoms */
+.apollo-detailed-symptoms {
+  margin-top: 16px;
+}
+
+.apollo-symptoms-details {
+  border: 1px solid rgb(226, 232, 240);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.apollo-symptoms-summary {
+  background: rgb(248, 250, 252);
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  color: rgb(37, 99, 235);
+  font-weight: 500;
+  border-bottom: 1px solid rgb(226, 232, 240);
+}
+
+.apollo-symptoms-summary:hover {
+  background: rgb(239, 246, 255);
+}
+
+.apollo-symptoms-detail-content {
+  padding: 16px;
+  background: white;
+}
+
+.apollo-symptom-detail-item {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgb(226, 232, 240);
+}
+
+.apollo-symptom-detail-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.apollo-symptom-detail-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgb(15, 23, 42);
+  margin-bottom: 8px;
+}
+
+.apollo-symptom-detail-properties {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.apollo-symptom-property {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.apollo-property-key {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgb(100, 116, 139);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.apollo-property-value {
+  font-size: 14px;
+  color: rgb(15, 23, 42);
+  font-weight: 500;
 }
 
 /* Mobile Responsiveness for Apollo Profile */

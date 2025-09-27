@@ -12,7 +12,7 @@ function PatientProfilePage() {
   // If no data in state, try to get from localStorage (fallback)
   const fallbackStructuredData = structuredData || JSON.parse(localStorage.getItem('lastAnalysis') || '{}');
   const fallbackOriginalText = originalText || localStorage.getItem('lastAnalysisText') || '';
-  const fallbackImageData = imageData || JSON.parse(localStorage.getItem('lastImageAnalysis') || 'null');
+  const fallbackImageData = imageData; // Use imageData from navigation state only
 
   // Debug: Log the data to see what we're working with
   console.log('PatientProfilePage - structuredData:', fallbackStructuredData);
