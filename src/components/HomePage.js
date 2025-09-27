@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PatientProfile from './PatientProfile';
 
 function HomePage() {
   const [textInput, setTextInput] = useState('');
@@ -23,21 +24,20 @@ function HomePage() {
     setResult(null);
 
     try {
-      // If image is uploaded, classify it first
+      let imageResult = null;
+      let textResult = null;
+
+      // Process image if uploaded
       if (selectedFile) {
-        const imageResult = await classifyImage(selectedFile);
-        if (imageResult.success) {
-          setResult({
-            ...imageResult,
-            type: 'image_classification',
-            filename: selectedFile.name
-          });
+        imageResult = await classifyImage(selectedFile);
+        if (!imageResult.success) {
+          alert('Error classifying image: ' + (imageResult.error || 'Unknown error'));
           setIsLoading(false);
           return;
         }
       }
 
-      // If text is provided, analyze it
+      // Process text if provided
       if (textInput.trim()) {
         const response = await fetch('http://localhost:5001/api/analyze', {
           method: 'POST',
@@ -52,14 +52,47 @@ function HomePage() {
         const data = await response.json();
         
         if (data.success) {
-          setResult(data);
+          textResult = data;
           // Store structured data for other pages
           localStorage.setItem('lastAnalysis', JSON.stringify(data.structuredData));
           localStorage.setItem('lastAnalysisText', textInput.trim());
         } else {
-          alert('Error: ' + (data.error || 'Failed to analyze text'));
+          alert('Error analyzing text: ' + (data.error || 'Failed to analyze text'));
+          setIsLoading(false);
+          return;
         }
       }
+
+      // Combine results
+      if (imageResult && textResult) {
+        // Both image and text analysis
+        setResult({
+          type: 'combined_analysis',
+          imageData: imageResult,
+          textData: textResult,
+          structuredData: {
+            ...textResult.structuredData,
+            imaging_analysis: {
+              predicted_class: imageResult.prediction.predicted_class,
+              confidence: imageResult.prediction.confidence,
+              probabilities: imageResult.prediction.probabilities,
+              filename: selectedFile.name
+            }
+          },
+          filename: selectedFile.name
+        });
+      } else if (imageResult) {
+        // Only image analysis
+        setResult({
+          ...imageResult,
+          type: 'image_classification',
+          filename: selectedFile.name
+        });
+      } else if (textResult) {
+        // Only text analysis
+        setResult(textResult);
+      }
+
     } catch (error) {
       console.error('Error:', error);
       alert('Error connecting to the server. Please make sure the backend is running.');
@@ -132,73 +165,32 @@ function HomePage() {
       </div>
 
       {result && (
-        <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#283593', borderRadius: '8px' }}>
-          {result.type === 'image_classification' ? (
-            <div>
-              <h3>Image Classification Result:</h3>
-              <div style={{ marginBottom: '20px' }}>
-                <h4 style={{ color: '#4caf50' }}>
-                  Predicted Class: {result.prediction.predicted_class}
-                </h4>
-                <p style={{ fontSize: '1.2rem' }}>
-                  <strong>Confidence:</strong> {(result.prediction.confidence * 100).toFixed(1)}%
-                </p>
-                <p><strong>File:</strong> {result.filename}</p>
-              </div>
-
-              <div>
-                <h4>Probability Distribution:</h4>
-                {Object.entries(result.prediction.probabilities).map(([className, prob]) => (
-                  <div key={className} style={{ marginBottom: '10px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-                      <span>{className.replace('_', ' ')}</span>
-                      <span>{(prob * 100).toFixed(1)}%</span>
-                    </div>
-                    <div style={{
-                      width: '100%',
-                      height: '20px',
-                      backgroundColor: '#e0e0e0',
-                      borderRadius: '10px',
-                      overflow: 'hidden'
-                    }}>
-                      <div style={{
-                        width: `${prob * 100}%`,
-                        height: '100%',
-                        backgroundColor: className === result.prediction.predicted_class ? '#4caf50' : '#3949ab',
-                        transition: 'width 0.3s ease'
-                      }} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div style={{ textAlign: 'center', marginTop: '20px' }}>
-                <button className="btn btn-secondary" onClick={() => navigate('/results')}>
-                  View Service Options →
-                </button>
-              </div>
-            </div>
+        <>
+          {result.type === 'combined_analysis' ? (
+            <PatientProfile 
+              structuredData={result.structuredData}
+              originalText={textInput}
+              imageData={result.imageData}
+            />
+          ) : result.type === 'image_classification' ? (
+            <PatientProfile 
+              structuredData={{
+                patient_id: `IMG_${Date.now().toString().slice(-6)}`,
+                primary_diagnosis: result.prediction.predicted_class.replace('_', ' '),
+                symptoms: [`Imaging shows ${result.prediction.predicted_class.replace('_', ' ')} with ${(result.prediction.confidence * 100).toFixed(1)}% confidence`],
+                medical_history: 'Based on medical imaging analysis',
+                imaging_confidence: result.prediction.confidence
+              }}
+              originalText="Medical imaging analysis"
+              imageData={result}
+            />
           ) : (
-            <div>
-              <h3>Analysis Result:</h3>
-              <pre style={{ 
-                backgroundColor: '#1a237e', 
-                padding: '15px', 
-                borderRadius: '5px', 
-                overflow: 'auto',
-                fontSize: '14px',
-                color: '#ffffff',
-                maxHeight: '400px'
-              }}>
-                {JSON.stringify(result.structuredData, null, 2)}
-              </pre>
-              <div style={{ textAlign: 'center', marginTop: '20px' }}>
-                <button className="btn btn-secondary" onClick={() => navigate('/results')}>
-                  View Service Options →
-                </button>
-              </div>
-            </div>
+            <PatientProfile 
+              structuredData={result.structuredData}
+              originalText={textInput}
+            />
           )}
-        </div>
+        </>
       )}
     </div>
   );

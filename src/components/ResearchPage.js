@@ -12,14 +12,16 @@ function ResearchPage() {
   // Get structured data from location state or localStorage
   const structuredData = location.state?.structuredData || 
     JSON.parse(localStorage.getItem('lastAnalysis') || '{}');
+  const imageData = location.state?.imageData || 
+    JSON.parse(localStorage.getItem('lastImageAnalysis') || 'null');
 
   useEffect(() => {
     if (structuredData && Object.keys(structuredData).length > 0) {
-      searchPubMed(structuredData);
+      searchPubMed(structuredData, imageData);
     }
   }, []);
 
-  const searchPubMed = async (data) => {
+  const searchPubMed = async (data, imgData) => {
     setIsLoading(true);
     setError(null);
     
@@ -30,7 +32,8 @@ function ResearchPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          structuredData: data
+          structuredData: data,
+          imageData: imgData
         }),
       });
 
@@ -57,7 +60,7 @@ function ResearchPage() {
         'visit motivation': searchQuery,
         symptoms: [{ 'name of symptom': searchQuery }]
       };
-      searchPubMed(mockData);
+      searchPubMed(mockData, imageData);
     }
   };
 
