@@ -109,19 +109,9 @@ Thumbs.db
 # Build outputs
 build/
 dist/
+node_modules
 
 # Cache files
-.cache/
 node_modules/.cache/
-backend/node_modules/.cache/
+.cache/
 *.cache
-
-# ML datasets and models
-brain_tumor_classifier/
-ml_model/data/
-ml_model/models/
-ml_model/uploads/
-*.pth
-*.h5
-*.pkl
-*.joblib

@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PatientProfile from './PatientProfile';
 
 function HomePage() {
   const [textInput, setTextInput] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState(null);
   const navigate = useNavigate();
 
   const handleFileChange = (event) => {
@@ -21,7 +19,6 @@ function HomePage() {
     }
 
     setIsLoading(true);
-    setResult(null);
 
     try {
       let imageResult = null;
@@ -66,7 +63,7 @@ function HomePage() {
       // Combine results
       if (imageResult && textResult) {
         // Both image and text analysis
-        setResult({
+        const combinedResult = {
           type: 'combined_analysis',
           imageData: imageResult,
           textData: textResult,
@@ -80,17 +77,43 @@ function HomePage() {
             }
           },
           filename: selectedFile.name
+        };
+        
+        // Navigate to patient profile page
+        navigate('/patient-profile', {
+          state: {
+            structuredData: combinedResult.structuredData,
+            originalText: textInput,
+            imageData: imageResult,
+            resultType: 'combined_analysis'
+          }
         });
       } else if (imageResult) {
         // Only image analysis
-        setResult({
-          ...imageResult,
-          type: 'image_classification',
-          filename: selectedFile.name
+        navigate('/patient-profile', {
+          state: {
+            structuredData: {
+              patient_id: `IMG_${Date.now().toString().slice(-6)}`,
+              primary_diagnosis: imageResult.prediction.predicted_class.replace('_', ' '),
+              symptoms: [`Imaging shows ${imageResult.prediction.predicted_class.replace('_', ' ')} with ${(imageResult.prediction.confidence * 100).toFixed(1)}% confidence`],
+              medical_history: 'Based on medical imaging analysis',
+              imaging_confidence: imageResult.prediction.confidence
+            },
+            originalText: "Medical imaging analysis",
+            imageData: imageResult,
+            resultType: 'image_classification'
+          }
         });
       } else if (textResult) {
         // Only text analysis
-        setResult(textResult);
+        navigate('/patient-profile', {
+          state: {
+            structuredData: textResult.structuredData,
+            originalText: textInput,
+            imageData: null,
+            resultType: 'text_analysis'
+          }
+        });
       }
 
     } catch (error) {
@@ -164,34 +187,6 @@ function HomePage() {
         </button>
       </div>
 
-      {result && (
-        <>
-          {result.type === 'combined_analysis' ? (
-            <PatientProfile 
-              structuredData={result.structuredData}
-              originalText={textInput}
-              imageData={result.imageData}
-            />
-          ) : result.type === 'image_classification' ? (
-            <PatientProfile 
-              structuredData={{
-                patient_id: `IMG_${Date.now().toString().slice(-6)}`,
-                primary_diagnosis: result.prediction.predicted_class.replace('_', ' '),
-                symptoms: [`Imaging shows ${result.prediction.predicted_class.replace('_', ' ')} with ${(result.prediction.confidence * 100).toFixed(1)}% confidence`],
-                medical_history: 'Based on medical imaging analysis',
-                imaging_confidence: result.prediction.confidence
-              }}
-              originalText="Medical imaging analysis"
-              imageData={result}
-            />
-          ) : (
-            <PatientProfile 
-              structuredData={result.structuredData}
-              originalText={textInput}
-            />
-          )}
-        </>
-      )}
     </div>
   );
 }

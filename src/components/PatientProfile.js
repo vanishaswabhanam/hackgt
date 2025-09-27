@@ -17,7 +17,7 @@ function PatientProfile({ structuredData, originalText, imageData, onNextSteps }
   };
 
   return (
-    <div className="patient-profile-popup">
+    <div className="patient-profile-page">
       <div className="patient-profile-header">
         <h2>👤 Patient Profile Created</h2>
         <p className="profile-subtitle">Based on medical analysis and imaging data</p>

@@ -5,12 +5,14 @@ import ResultsPage from './components/ResultsPage';
 import TreatmentPathwayPage from './components/TreatmentPathwayPage';
 import ClinicalTrialPage from './components/ClinicalTrialPage';
 import ResearchPage from './components/ResearchPage';
+import PatientProfilePage from './components/PatientProfilePage';
 
 function App() {
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/patient-profile" element={<PatientProfilePage />} />
         <Route path="/results" element={<ResultsPage />} />
         <Route path="/treatment-pathway" element={<TreatmentPathwayPage />} />
         <Route path="/clinical-trials" element={<ClinicalTrialPage />} />
