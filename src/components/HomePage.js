@@ -171,6 +171,11 @@ function HomePage() {
                   </div>
                 ))}
               </div>
+              <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                <button className="btn btn-secondary" onClick={() => navigate('/results')}>
+                  View Service Options →
+                </button>
+              </div>
             </div>
           ) : (
             <div>
