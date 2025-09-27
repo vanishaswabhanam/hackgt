@@ -7,9 +7,9 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-  background-color: #ffffff;
+  background-color: #F3F4F6;
   min-height: 100vh;
-  color: #1a1a1a;
+  color: #1E293B;
   line-height: 1.6;
 }
 
@@ -939,7 +939,7 @@ code {
 .apollo-homepage {
   min-height: 100vh;
   width: 100%;
-  background: white;
+  background: #F3F4F6;
   position: relative;
   overflow: hidden;
 }
@@ -1126,7 +1126,7 @@ code {
   font-size: 32px;
   font-weight: 600;
   letter-spacing: 0.1em;
-  background: linear-gradient(to right, rgb(37, 99, 235), rgb(8, 145, 178));
+  background: linear-gradient(to right, #0A2342, #38BDF8);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1161,8 +1161,8 @@ code {
 }
 
 .apollo-nav-button:hover {
-  color: rgb(37, 99, 235);
-  background: rgb(239, 246, 255);
+  color: #0A2342;
+  background: #80CBC4;
 }
 
 .apollo-nav-button svg {
@@ -1185,9 +1185,9 @@ code {
 
 .apollo-signin-button {
   position: relative;
-  background: rgb(37, 99, 235);
+  background: #0A2342;
   backdrop-filter: blur(4px);
-  border: 1px solid rgb(29, 78, 216);
+  border: 1px solid #0A2342;
   color: white;
   padding: 8px 16px;
   border-radius: 6px;
@@ -1198,7 +1198,7 @@ code {
 }
 
 .apollo-signin-button:hover {
-  background: rgb(29, 78, 216);
+  background: #38BDF8;
 }
 
 /* Main content area */
@@ -1223,7 +1223,7 @@ code {
   background: white;
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(226, 232, 240, 0.3);
+  border: 1px solid rgba(128, 203, 196, 0.3);
   transition: all 0.3s ease;
   height: fit-content;
   break-inside: avoid;
@@ -1233,7 +1233,7 @@ code {
 .apollo-section-glow {
   position: absolute;
   inset: -4px;
-  background: linear-gradient(to right, rgba(59, 130, 246, 0.15), rgba(14, 165, 233, 0.15), rgba(59, 130, 246, 0.15));
+  background: linear-gradient(to right, rgba(10, 35, 66, 0.15), rgba(56, 189, 248, 0.15), rgba(10, 35, 66, 0.15));
   border-radius: 8px;
   filter: blur(4px);
   opacity: 0.75;
@@ -1248,7 +1248,7 @@ code {
   position: relative;
   background: white;
   backdrop-filter: blur(4px);
-  border: 1px solid rgb(226, 232, 240);
+  border: 1px solid #80CBC4;
   border-radius: 8px;
   padding: 24px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -1263,26 +1263,26 @@ code {
 
 .apollo-section-icon {
   padding: 8px;
-  background: rgb(239, 246, 255);
+  background: #80CBC4;
   border-radius: 6px;
 }
 
 .apollo-section-icon svg {
   width: 20px;
   height: 20px;
-  color: rgb(37, 99, 235);
+  color: #0A2342;
 }
 
 .apollo-section-label {
-  color: rgb(71, 85, 105);
+  color: #1E293B;
   font-weight: 500;
   margin: 0;
 }
 
 .apollo-textarea {
-  background: rgb(248, 250, 252);
-  border: 1px solid rgb(203, 213, 225);
-  color: rgb(15, 23, 42);
+  background: #F3F4F6;
+  border: 1px solid #80CBC4;
+  color: #1E293B;
   width: 100%;
   padding: 16px;
   border-radius: 6px;
@@ -1295,17 +1295,17 @@ code {
 
 .apollo-textarea:focus {
   outline: none;
-  border-color: rgb(37, 99, 235);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #0A2342;
+  box-shadow: 0 0 0 3px rgba(10, 35, 66, 0.1);
 }
 
 .apollo-textarea::placeholder {
-  color: rgb(100, 116, 139);
+  color: #80CBC4;
 }
 
 /* Upload Zone */
 .apollo-upload-zone {
-  border: 2px dashed rgb(203, 213, 225);
+  border: 2px dashed #80CBC4;
   border-radius: 8px;
   padding: 48px 24px;
   text-align: center;
@@ -1315,24 +1315,24 @@ code {
 }
 
 .apollo-upload-zone:hover {
-  border-color: rgb(37, 99, 235);
-  background: rgba(239, 246, 255, 0.5);
+  border-color: #0A2342;
+  background: rgba(128, 203, 196, 0.1);
 }
 
 .apollo-upload-icon {
   width: 48px;
   height: 48px;
-  color: rgb(148, 163, 184);
+  color: #80CBC4;
   margin: 0 auto 16px;
   transition: color 0.2s ease;
 }
 
 .apollo-upload-zone:hover .apollo-upload-icon {
-  color: rgb(37, 99, 235);
+  color: #0A2342;
 }
 
 .apollo-upload-title {
-  color: rgb(71, 85, 105);
+  color: #1E293B;
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 8px;
@@ -1340,11 +1340,11 @@ code {
 }
 
 .apollo-upload-zone:hover .apollo-upload-title {
-  color: rgb(51, 65, 85);
+  color: #0A2342;
 }
 
 .apollo-upload-description {
-  color: rgb(100, 116, 139);
+  color: #80CBC4;
   font-size: 14px;
 }
 
@@ -1359,7 +1359,7 @@ code {
 
 /* Button Styles */
 .apollo-button {
-  background: rgb(37, 99, 235);
+  background: #0A2342;
   color: white;
   border: none;
   padding: 16px 24px;
@@ -1376,13 +1376,13 @@ code {
 }
 
 .apollo-button:hover:not(:disabled) {
-  background: rgb(29, 78, 216);
+  background: #38BDF8;
   transform: translateY(-1px);
-  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 10px 25px rgba(56, 189, 248, 0.3);
 }
 
 .apollo-button:disabled {
-  background: rgb(156, 163, 175);
+  background: #80CBC4;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
@@ -1449,9 +1449,9 @@ code {
   gap: 8px;
   padding: 8px 16px;
   background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(128, 203, 196, 0.2);
   border-radius: 8px;
-  color: rgb(71, 85, 105);
+  color: #1E293B;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -1460,9 +1460,9 @@ code {
 }
 
 .apollo-back-button:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.3);
-  color: rgb(15, 23, 42);
+  background: rgba(128, 203, 196, 0.2);
+  border-color: rgba(128, 203, 196, 0.3);
+  color: #0A2342;
 }
 
 .apollo-back-button svg {
@@ -1509,7 +1509,7 @@ code {
 }
 
 .apollo-card-description {
-  color: rgb(71, 85, 105);
+  color: #1E293B;
   line-height: 1.7;
   font-size: 16px;
   margin-bottom: 32px;
@@ -1520,14 +1520,14 @@ code {
 .apollo-card-action {
   margin-top: auto;
   padding-top: 20px;
-  border-top: 1px solid rgba(226, 232, 240, 0.5);
+  border-top: 1px solid rgba(128, 203, 196, 0.5);
 }
 
 .apollo-card-link {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #2563eb;
+  color: #0A2342;
   font-weight: 500;
   font-size: 14px;
   transition: all 0.2s ease;
@@ -1535,7 +1535,7 @@ code {
 }
 
 .apollo-card-link:hover {
-  color: #1d4ed8;
+  color: #38BDF8;
   gap: 10px;
 }
 
@@ -1572,7 +1572,7 @@ code {
 .apollo-treatment-bullet {
   width: 6px;
   height: 6px;
-  background: #2563eb;
+  background: #0A2342;
   border-radius: 50%;
   margin-top: 8px;
   flex-shrink: 0;
@@ -1592,12 +1592,12 @@ code {
 
 .apollo-medication-label {
   font-weight: 600;
-  color: rgb(71, 85, 105);
+  color: #1E293B;
   font-size: 14px;
 }
 
 .apollo-medication-value {
-  color: rgb(15, 23, 42);
+  color: #1E293B;
   font-size: 15px;
   line-height: 1.5;
 }
@@ -1605,7 +1605,7 @@ code {
 .apollo-alternatives {
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid rgba(226, 232, 240, 0.5);
+  border-top: 1px solid rgba(128, 203, 196, 0.5);
 }
 
 .apollo-treatment-actions {
@@ -1614,19 +1614,19 @@ code {
   justify-content: center;
   margin-top: 40px;
   padding-top: 32px;
-  border-top: 1px solid rgba(226, 232, 240, 0.5);
+  border-top: 1px solid rgba(128, 203, 196, 0.5);
 }
 
 .apollo-button-secondary {
   background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  color: rgb(71, 85, 105);
+  border: 1px solid rgba(128, 203, 196, 0.8);
+  color: #1E293B;
 }
 
 .apollo-button-secondary:hover {
   background: rgba(255, 255, 255, 1);
-  border-color: rgba(226, 232, 240, 1);
-  color: rgb(15, 23, 42);
+  border-color: rgba(128, 203, 196, 1);
+  color: #0A2342;
 }
 
 /* Loading and Error States */
@@ -1650,14 +1650,14 @@ code {
 .apollo-error-title {
   font-size: 24px;
   font-weight: 600;
-  color: rgb(15, 23, 42);
+  color: #1E293B;
   margin-bottom: 16px;
 }
 
 .apollo-loading-description,
 .apollo-error-description {
   font-size: 16px;
-  color: rgb(71, 85, 105);
+  color: #1E293B;
   line-height: 1.6;
   margin-bottom: 32px;
 }
@@ -1699,9 +1699,9 @@ code {
   gap: 10px;
   padding: 14px 24px;
   background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(226, 232, 240, 0.6);
+  border: 1px solid rgba(128, 203, 196, 0.6);
   border-radius: 16px;
-  color: rgb(71, 85, 105);
+  color: #1E293B;
   font-size: 15px;
   font-weight: 500;
   cursor: pointer;
@@ -1711,22 +1711,22 @@ code {
 
 .apollo-tab:hover {
   background: rgba(255, 255, 255, 1);
-  border-color: rgba(37, 99, 235, 0.3);
-  color: rgb(15, 23, 42);
+  border-color: rgba(10, 35, 66, 0.3);
+  color: #0A2342;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
 .apollo-tab-active {
-  background: #2563eb;
-  border-color: #2563eb;
+  background: #0A2342;
+  border-color: #0A2342;
   color: white;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 4px 12px rgba(10, 35, 66, 0.3);
 }
 
 .apollo-tab-active:hover {
-  background: #1d4ed8;
-  border-color: #1d4ed8;
+  background: #38BDF8;
+  border-color: #38BDF8;
   color: white;
   transform: translateY(-1px);
 }
@@ -1737,7 +1737,7 @@ code {
 }
 
 .apollo-trial-count {
-  color: #4caf50;
+  color: #80CBC4;
   font-weight: 600;
   font-size: 16px;
   margin-bottom: 28px;
@@ -1752,7 +1752,7 @@ code {
 
 .apollo-trial-card {
   background: white;
-  border: 1px solid rgba(226, 232, 240, 0.4);
+  border: 1px solid rgba(128, 203, 196, 0.4);
   border-radius: 16px;
   padding: 24px;
   transition: all 0.3s ease;
@@ -1762,7 +1762,7 @@ code {
 .apollo-trial-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  border-color: rgba(37, 99, 235, 0.4);
+  border-color: rgba(10, 35, 66, 0.4);
 }
 
 .apollo-trial-header {
@@ -1776,7 +1776,7 @@ code {
 .apollo-trial-title {
   font-size: 17px;
   font-weight: 600;
-  color: rgb(15, 23, 42);
+  color: #1E293B;
   line-height: 1.4;
   margin: 0;
   flex: 1;
@@ -1793,12 +1793,12 @@ code {
 }
 
 .apollo-trial-status-recruiting {
-  background: #4caf50;
+  background: #80CBC4;
   color: white;
 }
 
 .apollo-trial-status-active {
-  background: #ff9800;
+  background: #38BDF8;
   color: white;
 }
 
@@ -1814,13 +1814,13 @@ code {
 
 .apollo-trial-detail-label {
   font-weight: 600;
-  color: rgb(71, 85, 105);
+  color: #1E293B;
   font-size: 14px;
   min-width: 90px;
 }
 
 .apollo-trial-detail-value {
-  color: rgb(15, 23, 42);
+  color: #1E293B;
   font-size: 14px;
   line-height: 1.5;
 }
@@ -1832,29 +1832,29 @@ code {
 }
 
 .apollo-button-success {
-  background: #4caf50;
-  border-color: #4caf50;
+  background: #80CBC4;
+  border-color: #80CBC4;
   color: white;
   font-weight: 500;
 }
 
 .apollo-button-success:hover {
-  background: #45a049;
-  border-color: #45a049;
+  background: #0A2342;
+  border-color: #0A2342;
   transform: translateY(-1px);
 }
 
 .apollo-button-outline {
   background: transparent;
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  color: rgb(71, 85, 105);
+  border: 1px solid rgba(128, 203, 196, 0.8);
+  color: #1E293B;
   font-weight: 500;
 }
 
 .apollo-button-outline:hover {
   background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(226, 232, 240, 1);
-  color: rgb(15, 23, 42);
+  border-color: rgba(128, 203, 196, 1);
+  color: #0A2342;
   transform: translateY(-1px);
 }
 
@@ -1877,13 +1877,13 @@ code {
 .apollo-no-trials-title {
   font-size: 22px;
   font-weight: 600;
-  color: rgb(15, 23, 42);
+  color: #1E293B;
   margin-bottom: 16px;
 }
 
 .apollo-no-trials-description {
   font-size: 16px;
-  color: rgb(71, 85, 105);
+  color: #1E293B;
   line-height: 1.6;
   max-width: 400px;
   margin: 0 auto;
@@ -1896,7 +1896,7 @@ code {
 .apollo-filter-title {
   font-size: 15px;
   font-weight: 600;
-  color: rgb(15, 23, 42);
+  color: #1E293B;
   margin-bottom: 16px;
 }
 
@@ -1907,13 +1907,13 @@ code {
   margin-bottom: 12px;
   cursor: pointer;
   font-size: 14px;
-  color: rgb(71, 85, 105);
+  color: #1E293B;
   padding: 4px 0;
   transition: color 0.2s ease;
 }
 
 .apollo-filter-checkbox:hover {
-  color: rgb(15, 23, 42);
+  color: #0A2342;
 }
 
 .apollo-filter-checkbox input {
@@ -1923,15 +1923,15 @@ code {
 .apollo-checkbox-custom {
   width: 18px;
   height: 18px;
-  border: 2px solid rgba(226, 232, 240, 0.8);
+  border: 2px solid rgba(128, 203, 196, 0.8);
   border-radius: 6px;
   position: relative;
   transition: all 0.2s ease;
 }
 
 .apollo-filter-checkbox input:checked + .apollo-checkbox-custom {
-  background: #2563eb;
-  border-color: #2563eb;
+  background: #0A2342;
+  border-color: #0A2342;
 }
 
 .apollo-filter-checkbox input:checked + .apollo-checkbox-custom::after {
@@ -1960,7 +1960,7 @@ code {
   text-align: center;
   margin-top: 48px;
   padding-top: 40px;
-  border-top: 1px solid rgba(226, 232, 240, 0.5);
+  border-top: 1px solid rgba(128, 203, 196, 0.5);
 }
 
 /* Research Page Styles */
@@ -1979,23 +1979,23 @@ code {
 .apollo-search-input {
   width: 100%;
   padding: 16px 20px;
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  border: 1px solid rgba(128, 203, 196, 0.8);
   border-radius: 12px;
   font-size: 16px;
   background: rgba(255, 255, 255, 0.9);
-  color: rgb(15, 23, 42);
+  color: #1E293B;
   transition: all 0.3s ease;
 }
 
 .apollo-search-input:focus {
   outline: none;
-  border-color: #2563eb;
+  border-color: #0A2342;
   background: white;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 0 0 3px rgba(10, 35, 66, 0.1);
 }
 
 .apollo-search-input::placeholder {
-  color: rgb(148, 163, 184);
+  color: #80CBC4;
 }
 
 .apollo-search-actions {
@@ -2003,8 +2003,8 @@ code {
 }
 
 .apollo-button-primary {
-  background: #2563eb;
-  border-color: #2563eb;
+  background: #0A2342;
+  border-color: #0A2342;
   color: white;
   font-weight: 500;
   display: inline-flex;
@@ -2013,20 +2013,20 @@ code {
 }
 
 .apollo-button-primary:hover {
-  background: #1d4ed8;
-  border-color: #1d4ed8;
+  background: #38BDF8;
+  border-color: #38BDF8;
   transform: translateY(-1px);
 }
 
 .apollo-button-primary:disabled {
-  background: rgb(148, 163, 184);
-  border-color: rgb(148, 163, 184);
+  background: #80CBC4;
+  border-color: #80CBC4;
   cursor: not-allowed;
   transform: none;
 }
 
 .apollo-research-count {
-  color: #4caf50;
+  color: #80CBC4;
   font-weight: 600;
   font-size: 16px;
   margin-bottom: 28px;
@@ -2041,7 +2041,7 @@ code {
 
 .apollo-article-card {
   background: white;
-  border: 1px solid rgba(226, 232, 240, 0.4);
+  border: 1px solid rgba(128, 203, 196, 0.4);
   border-radius: 16px;
   padding: 24px;
   transition: all 0.3s ease;
@@ -2051,7 +2051,7 @@ code {
 .apollo-article-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  border-color: rgba(37, 99, 235, 0.4);
+  border-color: rgba(10, 35, 66, 0.4);
 }
 
 .apollo-article-header {
@@ -2061,7 +2061,7 @@ code {
 .apollo-article-title {
   font-size: 18px;
   font-weight: 600;
-  color: rgb(15, 23, 42);
+  color: #1E293B;
   line-height: 1.4;
   margin: 0;
 }
@@ -2078,13 +2078,13 @@ code {
 
 .apollo-article-detail-label {
   font-weight: 600;
-  color: rgb(71, 85, 105);
+  color: #1E293B;
   font-size: 14px;
   min-width: 70px;
 }
 
 .apollo-article-detail-value {
-  color: rgb(15, 23, 42);
+  color: #1E293B;
   font-size: 14px;
   line-height: 1.5;
 }
@@ -2096,18 +2096,18 @@ code {
 .apollo-abstract-title {
   font-size: 15px;
   font-weight: 600;
-  color: rgb(15, 23, 42);
+  color: #1E293B;
   margin-bottom: 12px;
 }
 
 .apollo-abstract-text {
   font-size: 14px;
   line-height: 1.6;
-  color: rgb(71, 85, 105);
-  background: rgba(248, 250, 252, 0.8);
+  color: #1E293B;
+  background: rgba(243, 244, 246, 0.8);
   padding: 16px;
   border-radius: 12px;
-  border: 1px solid rgba(226, 232, 240, 0.5);
+  border: 1px solid rgba(128, 203, 196, 0.5);
   margin: 0;
 }
 
@@ -2134,13 +2134,13 @@ code {
 .apollo-no-results-title {
   font-size: 22px;
   font-weight: 600;
-  color: rgb(15, 23, 42);
+  color: #1E293B;
   margin-bottom: 16px;
 }
 
 .apollo-no-results-description {
   font-size: 16px;
-  color: rgb(71, 85, 105);
+  color: #1E293B;
   line-height: 1.6;
   max-width: 400px;
   margin: 0 auto;
@@ -2154,18 +2154,18 @@ code {
 }
 
 .apollo-category-card {
-  background: #2563eb;
+  background: #0A2342;
   color: white;
   padding: 24px;
   border-radius: 16px;
   text-align: center;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  box-shadow: 0 4px 12px rgba(10, 35, 66, 0.2);
 }
 
 .apollo-category-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 8px 20px rgba(10, 35, 66, 0.3);
 }
 
 .apollo-category-title {
@@ -2186,7 +2186,7 @@ code {
   text-align: center;
   margin-top: 48px;
   padding-top: 40px;
-  border-top: 1px solid rgba(226, 232, 240, 0.5);
+  border-top: 1px solid rgba(128, 203, 196, 0.5);
 }
 
 /* Mobile Responsiveness */
@@ -2402,7 +2402,7 @@ code {
   font-size: 48px;
   font-weight: 600;
   letter-spacing: 0.05em;
-  background: linear-gradient(to right, rgb(37, 99, 235), rgb(8, 145, 178));
+  background: linear-gradient(to right, #0A2342, #38BDF8);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -2412,7 +2412,7 @@ code {
 
 .apollo-profile-subtitle {
   font-size: 18px;
-  color: rgb(71, 85, 105);
+  color: #1E293B;
   font-weight: 400;
 }
 
@@ -2426,11 +2426,11 @@ code {
   text-align: center;
   margin-top: 48px;
   padding-top: 32px;
-  border-top: 1px solid rgb(226, 232, 240);
+  border-top: 1px solid #80CBC4;
 }
 
 .apollo-footer-note {
-  color: rgb(100, 116, 139);
+  color: #80CBC4;
   font-size: 14px;
   margin-top: 16px;
 }
@@ -2478,22 +2478,22 @@ code {
 }
 
 .apollo-info-item {
-  background: rgb(248, 250, 252);
-  border: 1px solid rgb(226, 232, 240);
+  background: #F3F4F6;
+  border: 1px solid #80CBC4;
   border-radius: 8px;
   padding: 16px;
   transition: all 0.2s ease;
 }
 
 .apollo-info-item:hover {
-  border-color: rgb(37, 99, 235);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+  border-color: #0A2342;
+  box-shadow: 0 4px 12px rgba(10, 35, 66, 0.1);
 }
 
 .apollo-info-label {
   font-size: 12px;
   font-weight: 600;
-  color: rgb(100, 116, 139);
+  color: #80CBC4;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   display: block;
@@ -2502,14 +2502,14 @@ code {
 
 .apollo-info-value {
   font-size: 16px;
-  color: rgb(15, 23, 42);
+  color: #1E293B;
   font-weight: 500;
 }
 
 /* Apollo Condition Card */
 .apollo-condition-card {
-  background: rgb(248, 250, 252);
-  border: 1px solid rgb(226, 232, 240);
+  background: #F3F4F6;
+  border: 1px solid #80CBC4;
   border-radius: 8px;
   padding: 24px;
   margin-top: 20px;
@@ -2522,14 +2522,14 @@ code {
 .apollo-condition-label {
   font-size: 14px;
   font-weight: 600;
-  color: rgb(100, 116, 139);
+  color: #80CBC4;
   display: block;
   margin-bottom: 8px;
 }
 
 .apollo-condition-value {
   font-size: 18px;
-  color: rgb(15, 23, 42);
+  color: #1E293B;
   font-weight: 600;
   line-height: 1.4;
 }
@@ -2542,7 +2542,7 @@ code {
 .apollo-symptoms-label {
   font-size: 14px;
   font-weight: 600;
-  color: rgb(100, 116, 139);
+  color: #80CBC4;
   display: block;
   margin-bottom: 12px;
 }
@@ -2555,24 +2555,24 @@ code {
 }
 
 .apollo-symptom-tag {
-  background: linear-gradient(135deg, rgb(37, 99, 235), rgb(8, 145, 178));
+  background: linear-gradient(135deg, #0A2342, #38BDF8);
   color: white;
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 500;
-  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+  box-shadow: 0 2px 4px rgba(10, 35, 66, 0.2);
 }
 
 /* Apollo Debug Pre */
 .apollo-debug-pre {
-  background: rgb(248, 250, 252);
-  border: 1px solid rgb(226, 232, 240);
+  background: #F3F4F6;
+  border: 1px solid #80CBC4;
   border-radius: 8px;
   padding: 16px;
   overflow: auto;
   font-size: 12px;
-  color: rgb(15, 23, 42);
+  color: #1E293B;
   max-height: 300px;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   line-height: 1.4;
@@ -2588,24 +2588,24 @@ code {
 
 .apollo-test-item, .apollo-treatment-item {
   background: white;
-  border: 1px solid rgb(226, 232, 240);
+  border: 1px solid #80CBC4;
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  border-left: 4px solid rgb(37, 99, 235);
+  border-left: 4px solid #0A2342;
   transition: all 0.2s ease;
 }
 
 .apollo-test-item:hover, .apollo-treatment-item:hover {
-  border-color: rgb(37, 99, 235);
-  box-shadow: 0 8px 16px rgba(37, 99, 235, 0.1);
+  border-color: #0A2342;
+  box-shadow: 0 8px 16px rgba(10, 35, 66, 0.1);
   transform: translateY(-2px);
 }
 
 .apollo-test-label, .apollo-treatment-label {
   font-size: 12px;
   font-weight: 600;
-  color: rgb(100, 116, 139);
+  color: #80CBC4;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   display: block;
@@ -2614,12 +2614,12 @@ code {
 
 .apollo-test-value, .apollo-treatment-value {
   font-size: 16px;
-  color: rgb(15, 23, 42);
+  color: #1E293B;
   font-weight: 500;
 }
 
 .apollo-test-value.highlight, .apollo-treatment-value.highlight {
-  background: linear-gradient(135deg, rgb(37, 99, 235), rgb(8, 145, 178));
+  background: linear-gradient(135deg, #0A2342, #38BDF8);
   color: white;
   padding: 4px 12px;
   border-radius: 6px;
@@ -2636,7 +2636,7 @@ code {
 
 .apollo-history-item {
   background: white;
-  border: 1px solid rgb(226, 232, 240);
+  border: 1px solid #80CBC4;
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -2644,14 +2644,14 @@ code {
 }
 
 .apollo-history-item:hover {
-  border-color: rgb(37, 99, 235);
-  box-shadow: 0 8px 16px rgba(37, 99, 235, 0.1);
+  border-color: #0A2342;
+  box-shadow: 0 8px 16px rgba(10, 35, 66, 0.1);
 }
 
 .apollo-history-label {
   font-size: 12px;
   font-weight: 600;
-  color: rgb(100, 116, 139);
+  color: #80CBC4;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   display: block;
@@ -2660,7 +2660,7 @@ code {
 
 .apollo-history-value {
   font-size: 14px;
-  color: rgb(15, 23, 42);
+  color: #1E293B;
   line-height: 1.6;
 }
 
@@ -2670,14 +2670,14 @@ code {
 }
 
 .apollo-recommendations-text {
-  background: rgb(248, 250, 252);
-  border: 1px solid rgb(226, 232, 240);
+  background: #F3F4F6;
+  border: 1px solid #80CBC4;
   border-radius: 8px;
   padding: 20px;
   font-size: 16px;
-  color: rgb(15, 23, 42);
+  color: #1E293B;
   line-height: 1.6;
-  border-left: 4px solid rgb(37, 99, 235);
+  border-left: 4px solid #0A2342;
 }
 
 /* Apollo Imaging Results */
@@ -2690,7 +2690,7 @@ code {
 
 .apollo-imaging-item {
   background: white;
-  border: 1px solid rgb(226, 232, 240);
+  border: 1px solid #80CBC4;
   border-radius: 8px;
   padding: 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -2698,14 +2698,14 @@ code {
 }
 
 .apollo-imaging-item:hover {
-  border-color: rgb(37, 99, 235);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+  border-color: #0A2342;
+  box-shadow: 0 4px 12px rgba(10, 35, 66, 0.1);
 }
 
 .apollo-imaging-label {
   font-size: 12px;
   font-weight: 600;
-  color: rgb(100, 116, 139);
+  color: #80CBC4;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   display: block;
@@ -2714,12 +2714,12 @@ code {
 
 .apollo-imaging-value {
   font-size: 16px;
-  color: rgb(15, 23, 42);
+  color: #1E293B;
   font-weight: 500;
 }
 
 .apollo-imaging-value.highlight {
-  background: linear-gradient(135deg, rgb(37, 99, 235), rgb(8, 145, 178));
+  background: linear-gradient(135deg, #0A2342, #38BDF8);
   color: white;
   padding: 4px 12px;
   border-radius: 6px;
@@ -2727,7 +2727,7 @@ code {
 }
 
 .apollo-imaging-value.confidence {
-  color: rgb(34, 197, 94);
+  color: #80CBC4;
   font-weight: 600;
 }
 
@@ -2735,13 +2735,13 @@ code {
 .apollo-probability-distribution {
   margin-top: 24px;
   padding-top: 20px;
-  border-top: 1px solid rgb(226, 232, 240);
+  border-top: 1px solid #80CBC4;
 }
 
 .apollo-probability-distribution h4 {
   font-size: 16px;
   font-weight: 600;
-  color: rgb(15, 23, 42);
+  color: #1E293B;
   margin-bottom: 16px;
 }
 
@@ -2754,12 +2754,12 @@ code {
   justify-content: space-between;
   margin-bottom: 6px;
   font-size: 14px;
-  color: rgb(71, 85, 105);
+  color: #1E293B;
 }
 
 .apollo-probability-bar {
   height: 8px;
-  background: rgb(226, 232, 240);
+  background: #80CBC4;
   border-radius: 4px;
   overflow: hidden;
 }
@@ -2776,23 +2776,23 @@ code {
 }
 
 .apollo-symptoms-details {
-  border: 1px solid rgb(226, 232, 240);
+  border: 1px solid #80CBC4;
   border-radius: 8px;
   overflow: hidden;
 }
 
 .apollo-symptoms-summary {
-  background: rgb(248, 250, 252);
+  background: #F3F4F6;
   padding: 12px 16px;
   cursor: pointer;
   font-size: 14px;
-  color: rgb(37, 99, 235);
+  color: #0A2342;
   font-weight: 500;
-  border-bottom: 1px solid rgb(226, 232, 240);
+  border-bottom: 1px solid #80CBC4;
 }
 
 .apollo-symptoms-summary:hover {
-  background: rgb(239, 246, 255);
+  background: rgba(128, 203, 196, 0.1);
 }
 
 .apollo-symptoms-detail-content {
@@ -2803,7 +2803,7 @@ code {
 .apollo-symptom-detail-item {
   margin-bottom: 16px;
   padding-bottom: 16px;
-  border-bottom: 1px solid rgb(226, 232, 240);
+  border-bottom: 1px solid #80CBC4;
 }
 
 .apollo-symptom-detail-item:last-child {
@@ -2815,7 +2815,7 @@ code {
 .apollo-symptom-detail-title {
   font-size: 16px;
   font-weight: 600;
-  color: rgb(15, 23, 42);
+  color: #1E293B;
   margin-bottom: 8px;
 }
 
@@ -2835,14 +2835,14 @@ code {
 .apollo-property-key {
   font-size: 11px;
   font-weight: 600;
-  color: rgb(100, 116, 139);
+  color: #80CBC4;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .apollo-property-value {
   font-size: 14px;
-  color: rgb(15, 23, 42);
+  color: #1E293B;
   font-weight: 500;
 }
 
