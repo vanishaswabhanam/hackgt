@@ -308,6 +308,168 @@ function parsePubMedXML(xmlData) {
   return articles;
 }
 
+// Function to extract clinical trial search terms from structured JSON
+function extractClinicalTrialTerms(structuredData) {
+  const primaryTerms = [];
+  const secondaryTerms = [];
+  const tertiaryTerms = [];
+  
+  // Primary: diagnosis tests.condition + treatments.name
+  const conditions = [];
+  const treatments = [];
+  
+  if (structuredData['diagnosis tests'] && Array.isArray(structuredData['diagnosis tests'])) {
+    structuredData['diagnosis tests'].forEach(test => {
+      if (test.condition && test.condition !== 'None') {
+        conditions.push(test.condition);
+      }
+    });
+  }
+  
+  if (structuredData.treatments && Array.isArray(structuredData.treatments)) {
+    structuredData.treatments.forEach(treatment => {
+      if (treatment.name && treatment.name !== 'None') {
+        treatments.push(treatment.name);
+      }
+    });
+  }
+  
+  // Create primary queries (condition AND treatment)
+  conditions.forEach(condition => {
+    treatments.forEach(treatment => {
+      primaryTerms.push(`${condition} AND ${treatment}`);
+    });
+  });
+  
+  // Secondary: diagnosis tests.condition + symptoms.name of symptom
+  const symptoms = [];
+  if (structuredData.symptoms && Array.isArray(structuredData.symptoms)) {
+    structuredData.symptoms.forEach(symptom => {
+      if (symptom['name of symptom'] && symptom['name of symptom'] !== 'None') {
+        symptoms.push(symptom['name of symptom']);
+      }
+    });
+  }
+  
+  conditions.forEach(condition => {
+    symptoms.forEach(symptom => {
+      secondaryTerms.push(`${condition} AND ${symptom}`);
+    });
+  });
+  
+  // Tertiary: patient medical history.physiological context
+  if (structuredData['patient medical history'] && structuredData['patient medical history']['physiological context'] !== 'None') {
+    tertiaryTerms.push(structuredData['patient medical history']['physiological context']);
+  }
+  
+  return {
+    primary: primaryTerms.filter(term => term.trim().length > 0),
+    secondary: secondaryTerms.filter(term => term.trim().length > 0),
+    tertiary: tertiaryTerms.filter(term => term.trim().length > 0)
+  };
+}
+
+// Function to search ClinicalTrials.gov
+async function searchClinicalTrials(searchTerms, status = 'Recruiting', maxResults = 10) {
+  try {
+    const allTerms = [...searchTerms.primary, ...searchTerms.secondary, ...searchTerms.tertiary];
+    
+    if (allTerms.length === 0) {
+      return { trials: [], total: 0, query: '' };
+    }
+    
+    // Use the first term for now (can be enhanced to try multiple terms)
+    const query = allTerms[0];
+    const queryHash = require('crypto').createHash('md5').update(`${query}-${status}`).digest('hex');
+    
+    // Check cache first
+    const cachedResult = await new Promise((resolve) => {
+      db.get('SELECT search_results FROM pubmed_cache WHERE query_hash = ?', [queryHash], (err, row) => {
+        if (err || !row) {
+          resolve(null);
+        } else {
+          resolve(JSON.parse(row.search_results));
+        }
+      });
+    });
+    
+    if (cachedResult) {
+      console.log('Using cached ClinicalTrials results');
+      return cachedResult;
+    }
+    
+    // Build ClinicalTrials.gov API v2 URL
+    const apiUrl = `https://clinicaltrials.gov/api/v2/studies?query.term=${encodeURIComponent(query)}&pageSize=${maxResults}`;
+    
+    console.log('Searching ClinicalTrials.gov with query:', query);
+    
+    const response = await axios.get(apiUrl);
+    const data = response.data;
+    
+    if (!data.studies || !Array.isArray(data.studies)) {
+      return { trials: [], total: 0, query };
+    }
+    
+    // Filter by status and parse results
+    const trials = data.studies
+      .filter(trial => {
+        const statusField = trial.protocolSection?.statusModule?.overallStatus;
+        if (status === 'Recruiting') {
+          return statusField === 'RECRUITING';
+        } else if (status === 'Active') {
+          return statusField === 'ACTIVE_NOT_RECRUITING' || statusField === 'ACTIVE';
+        }
+        return true;
+      })
+      .slice(0, maxResults)
+      .map(trial => {
+        const protocol = trial.protocolSection;
+        const identification = protocol?.identificationModule;
+        const statusModule = protocol?.statusModule;
+        const conditions = protocol?.conditionsModule;
+        const interventions = protocol?.armsInterventionsModule;
+        const eligibility = protocol?.eligibilityModule;
+        const locations = protocol?.contactsLocationsModule;
+        
+        return {
+          nctId: identification?.nctId,
+          title: identification?.briefTitle,
+          condition: conditions?.conditions?.[0],
+          intervention: interventions?.interventions?.[0]?.name,
+          status: statusModule?.overallStatus,
+          phase: protocol?.designModule?.phases?.[0],
+          country: locations?.locations?.[0]?.country,
+          state: locations?.locations?.[0]?.state,
+          city: locations?.locations?.[0]?.city,
+          studyType: protocol?.designModule?.studyType,
+          ageMin: eligibility?.minimumAge,
+          ageMax: eligibility?.maximumAge,
+          gender: eligibility?.sex,
+          healthyVolunteers: eligibility?.healthyVolunteers,
+          url: `https://clinicaltrials.gov/study/${identification?.nctId}`
+        };
+      });
+    
+    const result = {
+      trials,
+      total: data.studies.length || 0,
+      query,
+      status,
+      searchTerms
+    };
+    
+    // Cache the result
+    db.run('INSERT OR REPLACE INTO pubmed_cache (query_hash, search_results) VALUES (?, ?)', 
+           [queryHash, JSON.stringify(result)]);
+    
+    return result;
+    
+  } catch (error) {
+    console.error('Error searching ClinicalTrials.gov:', error.message);
+    return { trials: [], total: 0, query: '', error: error.message };
+  }
+}
+
 // Function to generate structured JSON using Gemini
 async function generateStructuredJSON(inputText, similarNotes) {
   try {
@@ -419,6 +581,76 @@ app.post('/api/search-pubmed', async (req, res) => {
     console.error('Error in /api/search-pubmed:', error);
     res.status(500).json({ 
       error: 'Failed to search PubMed',
+      details: error.message 
+    });
+  }
+});
+
+// New ClinicalTrials.gov search endpoint
+app.post('/api/search-clinical-trials', async (req, res) => {
+  try {
+    const { structuredData, status = 'Recruiting', filters = {} } = req.body;
+    
+    if (!structuredData) {
+      return res.status(400).json({ error: 'Structured data is required' });
+    }
+
+    // Extract search terms from structured data
+    const searchTerms = extractClinicalTrialTerms(structuredData);
+    
+    if (searchTerms.primary.length === 0 && searchTerms.secondary.length === 0 && searchTerms.tertiary.length === 0) {
+      return res.json({
+        success: true,
+        trials: [],
+        total: 0,
+        query: '',
+        message: 'No searchable terms found in structured data'
+      });
+    }
+
+    // Search ClinicalTrials.gov
+    const trialsResults = await searchClinicalTrials(searchTerms, status, 10);
+    
+    // Apply additional filters if provided
+    let filteredTrials = trialsResults.trials;
+    
+    if (filters.phase && filters.phase.length > 0) {
+      filteredTrials = filteredTrials.filter(trial => 
+        filters.phase.some(phase => trial.phase && trial.phase.includes(phase))
+      );
+    }
+    
+    if (filters.location && filters.location.length > 0) {
+      filteredTrials = filteredTrials.filter(trial => 
+        filters.location.some(loc => 
+          trial.country && trial.country.toLowerCase().includes(loc.toLowerCase()) ||
+          trial.state && trial.state.toLowerCase().includes(loc.toLowerCase())
+        )
+      );
+    }
+    
+    if (filters.studyType && filters.studyType.length > 0) {
+      filteredTrials = filteredTrials.filter(trial => 
+        filters.studyType.some(type => 
+          trial.studyType && trial.studyType.toLowerCase().includes(type.toLowerCase())
+        )
+      );
+    }
+    
+    res.json({
+      success: true,
+      trials: filteredTrials,
+      total: trialsResults.total,
+      query: trialsResults.query,
+      status: trialsResults.status,
+      searchTerms: trialsResults.searchTerms,
+      appliedFilters: filters
+    });
+    
+  } catch (error) {
+    console.error('Error in /api/search-clinical-trials:', error);
+    res.status(500).json({ 
+      error: 'Failed to search ClinicalTrials.gov',
       details: error.message 
     });
   }
