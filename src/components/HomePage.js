@@ -237,7 +237,7 @@ function HomePage() {
                 height: '24px', 
                 backgroundColor: '#0A2342', 
                 borderRadius: '4px',
-                marginRight: '0.2rem',
+                marginRight: '0.75rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
