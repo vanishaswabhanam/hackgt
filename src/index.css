@@ -2215,11 +2215,14 @@ code {
 
 .apollo-article-card {
   background: white;
-  border: 1px solid rgba(128, 203, 196, 0.4);
+  border: 1px solid rgba(10, 35, 66, 0.4);
   border-radius: 16px;
   padding: 24px;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  height: 500px;
+  display: flex;
+  flex-direction: column;
 }
 
 .apollo-article-card:hover {
@@ -2265,6 +2268,9 @@ code {
 
 .apollo-article-abstract {
   margin-bottom: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .apollo-abstract-title {
@@ -2276,14 +2282,15 @@ code {
 
 .apollo-abstract-text {
   font-size: 14px;
+  color: #64748B;
   line-height: 1.6;
-  color: #1E293B;
-  background: rgba(243, 244, 246, 0.8);
-  padding: 16px;
-  border-radius: 12px;
-  border: 1px solid rgba(128, 203, 196, 0.5);
-  margin: 0;
+  flex: 1;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 8;
+  -webkit-box-orient: vertical;
 }
+
 
 .apollo-article-actions {
   text-align: center;
@@ -3033,6 +3040,87 @@ code {
   font-weight: 500;
 }
 
+/* Stacked Article Cards */
+.apollo-articles-stack {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.apollo-stacked-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.apollo-top-card {
+  position: relative;
+  z-index: 10;
+  transform: translateY(0);
+  cursor: pointer;
+}
+
+.apollo-top-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.apollo-stacked-under {
+  opacity: 0.3;
+  transform: translateY(8px) scale(0.98);
+  pointer-events: none;
+}
+
+.apollo-stacked-under:nth-child(2) {
+  z-index: 9;
+  transform: translateY(12px) scale(0.96);
+}
+
+.apollo-stacked-under:nth-child(3) {
+  z-index: 8;
+  transform: translateY(16px) scale(0.94);
+}
+
+.apollo-stacked-under:nth-child(4) {
+  z-index: 7;
+  transform: translateY(20px) scale(0.92);
+}
+
+.apollo-stacked-under:nth-child(5) {
+  z-index: 6;
+  transform: translateY(24px) scale(0.90);
+}
+
+.apollo-stacked-under:nth-child(6) {
+  z-index: 5;
+  transform: translateY(28px) scale(0.88);
+}
+
+.apollo-stacked-under:nth-child(7) {
+  z-index: 4;
+  transform: translateY(32px) scale(0.86);
+}
+
+.apollo-stacked-under:nth-child(8) {
+  z-index: 3;
+  transform: translateY(36px) scale(0.84);
+}
+
+.apollo-stacked-under:nth-child(9) {
+  z-index: 2;
+  transform: translateY(40px) scale(0.82);
+}
+
+.apollo-stacked-under:nth-child(10) {
+  z-index: 1;
+  transform: translateY(44px) scale(0.80);
+}
+
+
 /* Mobile Responsiveness for Apollo Profile */
 @media (max-width: 768px) {
   .apollo-profile-title {
@@ -3049,5 +3137,9 @@ code {
   
   .apollo-history-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .apollo-articles-stack {
+    padding: 20px 10px;
   }
 }
