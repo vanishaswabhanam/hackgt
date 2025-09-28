@@ -1,9 +1,20 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { HeroSection } from './ui/hero-section-with-smooth-bg-shader';
 
 function ResultsPage() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Same colors as homepage for consistency
+  const contrastedColors = [
+    "#D4E8F7", // More visible blue
+    "#D4F0E8", // More visible green
+    "#80CBC4", // Pastel Teal (replacing warm orange)
+    "#38BDF8", // Bright Sky (replacing light peach)
+    "#E0F0D4", // More visible mint
+    "#E8E8E8"  // More visible gray
+  ];
 
   // Get structured data from location state or localStorage
   const structuredData = location.state?.structuredData || 
@@ -65,7 +76,24 @@ function ResultsPage() {
   );
 
   return (
-    <div className="apollo-homepage">
+    <>
+      <style>
+        {`
+          * {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+          }
+          *::-webkit-tooltip {
+            display: none !important;
+          }
+          [title]:hover:after {
+            display: none !important;
+          }
+        `}
+      </style>
+      <div className="apollo-homepage">
       {/* Subtle background pattern */}
       <div className="apollo-background-pattern"></div>
       
@@ -104,92 +132,238 @@ function ResultsPage() {
       {/* Main content area */}
       <div className="apollo-main">
         <div className="apollo-content">
+          {/* Dynamic Gradient Background Rectangle */}
+          <div style={{
+            position: 'absolute',
+            top: '75%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '95vw',
+            height: '60vh',
+            borderRadius: '40px',
+            zIndex: 1,
+            overflow: 'hidden'
+          }}>
+            <HeroSection
+              title=""
+              highlightText=""
+              description=""
+              buttonText=""
+              colors={contrastedColors}
+              distortion={1.2}
+              swirl={0.8}
+              speed={1.0}
+              offsetX={0.1}
+              className=""
+              veilOpacity="bg-white/10"
+              maxWidth="max-w-none"
+            />
+          </div>
+          
           {/* Results Cards */}
-          <div className="apollo-results-grid">
+          <div style={{ 
+            position: 'relative', 
+            zIndex: 2, 
+            display: 'flex', 
+            gap: '2rem', 
+            justifyContent: 'center',
+            alignItems: 'stretch',
+            padding: '0 2rem',
+            marginTop: '5vh'
+          }}>
             {/* Treatment Pathway Card */}
-            <div className="apollo-section apollo-results-card" onClick={() => handleCardClick('/treatment-pathway')}>
-              <div className="apollo-section-glow"></div>
-              <div className="apollo-section-content">
-                <div className="apollo-section-header">
-                  <div className="apollo-section-icon">
-                    <HospitalIcon />
-                  </div>
-                  <label className="apollo-section-label">
-                    Treatment Pathway Recommendation
-                  </label>
-                </div>
-                <div className="apollo-card-content">
-                  <p className="apollo-card-description">
-                    Get personalized treatment recommendations based on your condition and medical history. 
-                    This includes medication suggestions, therapy options, and lifestyle modifications.
-                  </p>
-                  <div className="apollo-card-action">
-                    <span className="apollo-card-link">
-                      Click to explore
-                      <ArrowRightIcon />
-                    </span>
-                  </div>
-                </div>
+            <div style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              borderRadius: '20px',
+              padding: '2rem',
+              flex: 1,
+              maxWidth: '350px',
+              minHeight: '400px',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+              userSelect: 'none',
+              WebkitUserSelect: 'none',
+              MozUserSelect: 'none',
+              msUserSelect: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+            onClick={() => handleCardClick('/treatment-pathway')}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-8px)';
+              e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.25)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
+            }}>
+              <div style={{ height: '24px', marginBottom: '0.5rem' }}></div>
+              <h3 style={{
+                fontSize: '1.5rem',
+                fontWeight: '600',
+                margin: '0 0 1.5rem 0',
+                color: '#1E293B',
+                lineHeight: '1.3'
+              }}>
+                Treatment Pathway Recommendation
+              </h3>
+              <p style={{
+                fontSize: '0.85rem',
+                color: '#64748B',
+                margin: '0 0 1.5rem 0',
+                lineHeight: '1.5',
+                flex: 1
+              }}>
+                Get personalized treatment recommendations based on your condition and medical history. 
+                Includes medication suggestions, therapy options, and lifestyle modifications.
+              </p>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                color: '#80CBC4',
+                fontSize: '0.9rem',
+                fontWeight: '500'
+              }}>
+                <span>Explore</span>
+                <ArrowRightIcon />
               </div>
             </div>
 
             {/* Clinical Trials Card */}
-            <div className="apollo-section apollo-results-card" onClick={() => handleCardClick('/clinical-trials')}>
-              <div className="apollo-section-glow"></div>
-              <div className="apollo-section-content">
-                <div className="apollo-section-header">
-                  <div className="apollo-section-icon">
-                    <MicroscopeIcon />
-                  </div>
-                  <label className="apollo-section-label">
-                    Clinical Trial Finder
-                  </label>
-                </div>
-                <div className="apollo-card-content">
-                  <p className="apollo-card-description">
-                    Discover relevant clinical trials and research studies that match your condition. 
-                    Find opportunities to participate in cutting-edge medical research.
-                  </p>
-                  <div className="apollo-card-action">
-                    <span className="apollo-card-link">
-                      Click to explore
-                      <ArrowRightIcon />
-                    </span>
-                  </div>
-                </div>
+            <div style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              borderRadius: '20px',
+              padding: '2rem',
+              flex: 1,
+              maxWidth: '350px',
+              minHeight: '400px',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+              userSelect: 'none',
+              WebkitUserSelect: 'none',
+              MozUserSelect: 'none',
+              msUserSelect: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+            onClick={() => handleCardClick('/clinical-trials')}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-8px)';
+              e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.25)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
+            }}>
+              <div style={{ height: '24px', marginBottom: '0.5rem' }}></div>
+              <h3 style={{
+                fontSize: '1.5rem',
+                fontWeight: '600',
+                margin: '0 0 1.5rem 0',
+                color: '#1E293B',
+                lineHeight: '1.3'
+              }}>
+                Clinical Trial Finder
+              </h3>
+              <p style={{
+                fontSize: '0.85rem',
+                color: '#64748B',
+                margin: '0 0 1.5rem 0',
+                lineHeight: '1.5',
+                flex: 1
+              }}>
+                Discover relevant clinical trials and research studies that match your condition. 
+                Find opportunities to participate in cutting-edge medical research.
+              </p>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                color: '#38BDF8',
+                fontSize: '0.9rem',
+                fontWeight: '500'
+              }}>
+                <span>Explore</span>
+                <ArrowRightIcon />
               </div>
             </div>
 
             {/* Research Card */}
-            <div className="apollo-section apollo-results-card" onClick={() => handleCardClick('/research')}>
-              <div className="apollo-section-glow"></div>
-              <div className="apollo-section-content">
-                <div className="apollo-section-header">
-                  <div className="apollo-section-icon">
-                    <BookIcon />
-                  </div>
-                  <label className="apollo-section-label">
-                    Relevant Research
-                  </label>
-                </div>
-                <div className="apollo-card-content">
-                  <p className="apollo-card-description">
-                    Access the latest medical research papers, studies, and publications related to your condition. 
-                    Stay informed about recent developments in your field of interest.
-                  </p>
-                  <div className="apollo-card-action">
-                    <span className="apollo-card-link">
-                      Click to explore
-                      <ArrowRightIcon />
-                    </span>
-                  </div>
-                </div>
+            <div style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              borderRadius: '20px',
+              padding: '2rem',
+              flex: 1,
+              maxWidth: '350px',
+              minHeight: '400px',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+              userSelect: 'none',
+              WebkitUserSelect: 'none',
+              MozUserSelect: 'none',
+              msUserSelect: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+            onClick={() => handleCardClick('/research')}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-8px)';
+              e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.25)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
+            }}>
+              <div style={{ height: '24px', marginBottom: '0.5rem' }}></div>
+              <h3 style={{
+                fontSize: '1.5rem',
+                fontWeight: '600',
+                margin: '0 0 1.5rem 0',
+                color: '#1E293B',
+                lineHeight: '1.3'
+              }}>
+                Relevant Research
+              </h3>
+              <p style={{
+                fontSize: '0.85rem',
+                color: '#64748B',
+                margin: '0 0 1.5rem 0',
+                lineHeight: '1.5',
+                flex: 1
+              }}>
+                Access the latest medical research papers, studies, and publications related to your condition. 
+                Stay informed about recent developments in your field of interest.
+              </p>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                color: '#D4F0E8',
+                fontSize: '0.9rem',
+                fontWeight: '500'
+              }}>
+                <span>Explore</span>
+                <ArrowRightIcon />
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    </>
   );
 }
 
