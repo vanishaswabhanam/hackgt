@@ -6,6 +6,7 @@ export default function SimpleApolloHomePage() {
   const [scrollY, setScrollY] = useState(0);
   const [patientText, setPatientText] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const navigate = useNavigate();
 
@@ -33,6 +34,17 @@ export default function SimpleApolloHomePage() {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
+    
+    // Create image preview
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setImagePreview(null);
+    }
   };
 
   const classifyImage = async (file) => {
@@ -215,6 +227,23 @@ export default function SimpleApolloHomePage() {
           @keyframes spin {
             to { transform: rotate(360deg); }
           }
+          
+          @keyframes scanLine {
+            0% {
+              top: 0;
+              opacity: 0;
+            }
+            10% {
+              opacity: 1;
+            }
+            90% {
+              opacity: 1;
+            }
+            100% {
+              top: calc(100% - 4px);
+              opacity: 0;
+            }
+          }
         `}
       </style>
       {/* Gradient Section with Border */}
@@ -306,36 +335,100 @@ export default function SimpleApolloHomePage() {
           </div>
           <div style={{
             flex: 1,
-            border: '2px dashed #d1d5db',
+            border: imagePreview ? '2px solid #80CBC4' : '2px dashed #d1d5db',
             borderRadius: '8px',
-            padding: '2rem 4rem',
+            padding: imagePreview ? '1rem' : '2rem 4rem',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: '#f9fafb',
             textAlign: 'center',
-            position: 'relative'
+            position: 'relative',
+            overflow: 'hidden'
           }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}></div>
-            <p style={{ fontSize: '0.875rem', color: '#6b7280', margin: '0 0 1rem 0' }}>
-              Upload scans, images, or research files for AI analysis
-            </p>
-            <p style={{ fontSize: '0.75rem', color: '#9ca3af', margin: '0 0 1.5rem 0' }}>
-              DICOM, PNG, JPG, PDF up to 50MB
-            </p>
-            {selectedFile && (
-              <div style={{ 
-                marginTop: '16px', 
-                padding: '8px 16px', 
-                background: '#e8f5e8', 
-                color: '#2d5a2d', 
-                borderRadius: '6px', 
-                fontSize: '14px', 
-                fontWeight: '500' 
-              }}>
-                Selected: {selectedFile.name}
-              </div>
+            {imagePreview ? (
+              <>
+                <div style={{ 
+                  position: 'relative', 
+                  display: 'inline-block',
+                  marginBottom: '1rem'
+                }}>
+                  <img 
+                    src={imagePreview} 
+                    alt="Uploaded medical scan" 
+                    style={{
+                      maxWidth: '100%',
+                      maxHeight: '300px',
+                      objectFit: 'contain',
+                      borderRadius: '6px'
+                    }}
+                  />
+                  {/* Scanning animation overlay */}
+                  {isAnalyzing && (
+                    <>
+                      <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background: 'rgba(128, 203, 196, 0.1)',
+                        borderRadius: '6px',
+                        pointerEvents: 'none'
+                      }} />
+                      <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '4px',
+                        background: 'linear-gradient(90deg, transparent, #80CBC4, transparent)',
+                        animation: 'scanLine 2s ease-in-out infinite',
+                        borderRadius: '2px',
+                        boxShadow: '0 0 10px #80CBC4'
+                      }} />
+                      <div style={{
+                        position: 'absolute',
+                        top: '10px',
+                        right: '10px',
+                        background: 'rgba(128, 203, 196, 0.9)',
+                        color: 'white',
+                        padding: '4px 8px',
+                        borderRadius: '4px',
+                        fontSize: '12px',
+                        fontWeight: '600'
+                      }}>
+                        🔍 SCANNING...
+                      </div>
+                    </>
+                  )}
+                </div>
+                <div style={{ 
+                  padding: '8px 16px', 
+                  background: isAnalyzing ? '#e0f2f1' : '#e8f5e8', 
+                  color: isAnalyzing ? '#00695c' : '#2d5a2d', 
+                  borderRadius: '6px', 
+                  fontSize: '14px', 
+                  fontWeight: '500',
+                  marginBottom: '0.5rem'
+                }}>
+                  {isAnalyzing ? '🔄 Analyzing...' : '✓'} {selectedFile.name}
+                </div>
+                <p style={{ fontSize: '0.75rem', color: '#6b7280', margin: 0 }}>
+                  {isAnalyzing ? 'AI is analyzing your medical image...' : 'Click to change image'}
+                </p>
+              </>
+            ) : (
+              <>
+                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📁</div>
+                <p style={{ fontSize: '0.875rem', color: '#6b7280', margin: '0 0 1rem 0' }}>
+                  Upload scans, images, or research files for AI analysis
+                </p>
+                <p style={{ fontSize: '0.75rem', color: '#9ca3af', margin: '0 0 1.5rem 0' }}>
+                  DICOM, PNG, JPG, PDF up to 50MB
+                </p>
+              </>
             )}
             <input
               type="file"
