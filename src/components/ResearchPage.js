@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { HeroSection } from './ui/hero-section-with-smooth-bg-shader';
 
 function ResearchPage() {
   const navigate = useNavigate();
@@ -8,6 +9,17 @@ function ResearchPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+
+  // Same colors as ResultsPage for consistency
+  const contrastedColors = [
+    "#D4E8F7", // More visible blue
+    "#D4F0E8", // More visible green
+    "#80CBC4", // Pastel Teal (replacing warm orange)
+    "#38BDF8", // Bright Sky (replacing light peach)
+    "#E0F0D4", // More visible mint
+    "#E8E8E8"  // More visible gray
+  ];
 
   // Get structured data from location state or localStorage
   const structuredData = location.state?.structuredData || 
@@ -58,6 +70,18 @@ function ResearchPage() {
         symptoms: [{ 'name of symptom': searchQuery }]
       };
       searchPubMed(mockData);
+    }
+  };
+
+  const handleCardClick = (event) => {
+    // Don't advance if clicking on the "Read Full Article" button
+    if (event.target.closest('.apollo-button-secondary')) {
+      return;
+    }
+    
+    // Only advance if there are multiple articles
+    if (articles.length > 1) {
+      setCurrentCardIndex((prevIndex) => (prevIndex + 1) % articles.length);
     }
   };
 
@@ -192,69 +216,93 @@ function ResearchPage() {
             </div>
           )}
 
-          {/* Research Results */}
+          {/* Research Results - Stacked Cards */}
           {articles.length > 0 && (
-            <div className="apollo-section">
-              <div className="apollo-section-glow"></div>
-              <div className="apollo-section-content">
-                <div className="apollo-section-header">
-                  <div className="apollo-section-icon">
-                    <FileTextIcon />
-                  </div>
-                  <label className="apollo-section-label">
-                    Research Results
-                  </label>
-                </div>
-                <div className="apollo-research-count">
-                  Found {articles.length} relevant articles
-                </div>
+            <>
+              {/* Gradient Background Rectangle - Square shaped for cards */}
+              <div style={{
+                position: 'absolute',
+                top: '33%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: '800px',
+                height: '600px',
+                borderRadius: '40px',
+                zIndex: 1,
+                overflow: 'hidden',
+                pointerEvents: 'none'
+              }}>
+                <HeroSection
+                  title=""
+                  highlightText=""
+                  description=""
+                  buttonText=""
+                  colors={contrastedColors}
+                  distortion={1.2}
+                  swirl={0.8}
+                  speed={1.0}
+                  offsetX={0.1}
+                  className=""
+                  veilOpacity="bg-white/10"
+                  maxWidth="max-w-none"
+                />
+              </div>
+              
+              <div className="apollo-articles-stack" style={{ position: 'relative', zIndex: 2 }}>
+              {articles.map((article, index) => {
+                const isTopCard = index === currentCardIndex;
+                const stackPosition = (index - currentCardIndex + articles.length) % articles.length;
                 
-                <div className="apollo-articles-grid">
-                  {articles.map((article, index) => (
-                    <div key={article.pmid || index} className="apollo-article-card">
-                      <div className="apollo-article-header">
-                        <h3 className="apollo-article-title">
-                          {article.title}
-                        </h3>
+                return (
+                  <div 
+                    key={article.pmid || index} 
+                    className={`apollo-article-card apollo-stacked-card ${isTopCard ? 'apollo-top-card' : 'apollo-stacked-under'}`}
+                    style={{ zIndex: articles.length - stackPosition }}
+                    onClick={handleCardClick}
+                  >
+                    <div className="apollo-article-header">
+                      <h3 className="apollo-article-title">
+                        {article.title}
+                      </h3>
+                    </div>
+                    
+                    <div className="apollo-article-details">
+                      <div className="apollo-article-detail">
+                        <span className="apollo-article-detail-label">PMID:</span>
+                        <span className="apollo-article-detail-value">{article.pmid}</span>
                       </div>
-                      
-                      <div className="apollo-article-details">
-                        <div className="apollo-article-detail">
-                          <span className="apollo-article-detail-label">PMID:</span>
-                          <span className="apollo-article-detail-value">{article.pmid}</span>
-                        </div>
-                        <div className="apollo-article-detail">
-                          <span className="apollo-article-detail-label">Journal:</span>
-                          <span className="apollo-article-detail-value">{article.journal}</span>
-                        </div>
-                        <div className="apollo-article-detail">
-                          <span className="apollo-article-detail-label">Year:</span>
-                          <span className="apollo-article-detail-value">{article.year}</span>
-                        </div>
+                      <div className="apollo-article-detail">
+                        <span className="apollo-article-detail-label">Journal:</span>
+                        <span className="apollo-article-detail-value">{article.journal}</span>
                       </div>
-                      
-                      <div className="apollo-article-abstract">
-                        <h4 className="apollo-abstract-title">Abstract</h4>
-                        <p className="apollo-abstract-text">
-                          {article.abstract}
-                        </p>
-                      </div>
-                      
-                      <div className="apollo-article-actions">
-                        <a 
-                          href={article.url} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="apollo-button apollo-button-secondary"
-                        >
-                          Read Full Article →
-                        </a>
+                      <div className="apollo-article-detail">
+                        <span className="apollo-article-detail-label">Year:</span>
+                        <span className="apollo-article-detail-value">{article.year}</span>
                       </div>
                     </div>
-                  ))}
-                </div>
+                    
+                    <div className="apollo-article-abstract">
+                      <h4 className="apollo-abstract-title">Abstract</h4>
+                      <p className="apollo-abstract-text">
+                        {article.abstract}
+                      </p>
+                    </div>
+                    
+                    <div className="apollo-article-actions">
+                      <a 
+                        href={article.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="apollo-button apollo-button-secondary"
+                      >
+                        Read Full Article →
+                      </a>
+                    </div>
+                  </div>
+                );
+              })}
               </div>
-            </div>
+            </>
           )}
 
           {/* No Results State */}
@@ -276,7 +324,7 @@ function ResearchPage() {
           )}
 
           {/* Search Section */}
-          <div className="apollo-section">
+          <div className="apollo-section" style={{ width: '800px', margin: '0 auto' }}>
             <div className="apollo-section-glow"></div>
             <div className="apollo-section-content">
               <div className="apollo-section-header">
