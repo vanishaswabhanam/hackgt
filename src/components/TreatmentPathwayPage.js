@@ -145,54 +145,9 @@ function TreatmentPathwayPage() {
         alignItems: 'center', 
         height: '100vh', 
         backgroundColor: '#F3F4F6',
-        padding: '2rem'
+        padding: '2rem',
+        paddingTop: '120px'
       }}>
-        {/* Modern Header */}
-        <div style={{
-          position: 'absolute',
-          top: '2rem',
-          left: '2rem',
-          right: '2rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}>
-          <div 
-            onClick={() => navigate('/')} 
-            style={{ 
-              cursor: 'pointer',
-              fontSize: '2rem',
-              fontWeight: '700',
-              color: '#1E293B',
-              fontFamily: 'Rajdhani, sans-serif'
-            }}
-          >
-                  APOLLO AI
-              </div>
-              
-          <button 
-            onClick={() => navigate('/results')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.75rem 1.5rem',
-              backgroundColor: 'rgba(255, 255, 255, 0.9)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              borderRadius: '12px',
-              color: '#1E293B',
-              fontSize: '1rem',
-              fontWeight: '500',
-              cursor: 'pointer',
-              backdropFilter: 'blur(10px)',
-              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
-              transition: 'all 0.3s ease'
-            }}
-          >
-                  <ArrowLeftIcon />
-                  Back to Results
-                </button>
-              </div>
 
         {/* Modern Loading Card */}
         <div style={{
@@ -404,7 +359,7 @@ function TreatmentPathwayPage() {
             }
           `}
         </style>
-    <div className="apollo-homepage">
+    <div className="apollo-homepage" style={{ paddingTop: '80px' }}>
         <div className="apollo-content">
           {/* Gray Background - Same as Cards Page */}
           <div style={{
@@ -417,61 +372,6 @@ function TreatmentPathwayPage() {
             zIndex: 1
           }}></div>
       
-      {/* Header Navigation */}
-          <div style={{
-            position: 'relative',
-            zIndex: 10,
-            padding: '2rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-          }}>
-            {/* Logo */}
-            <div 
-              onClick={() => navigate('/')} 
-              style={{ 
-                cursor: 'pointer',
-                fontSize: '2rem',
-                fontWeight: '700',
-                color: '#1E293B',
-                fontFamily: 'Rajdhani, sans-serif'
-              }}
-            >
-                APOLLO AI
-            </div>
-            
-            {/* Back Button */}
-            <button 
-              onClick={() => navigate('/results')}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                padding: '0.75rem 1.5rem',
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                borderRadius: '12px',
-                color: '#1E293B',
-                fontSize: '1rem',
-                fontWeight: '500',
-                cursor: 'pointer',
-                backdropFilter: 'blur(10px)',
-                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.transform = 'translateY(-2px)';
-                e.target.style.boxShadow = '0 8px 30px rgba(0, 0, 0, 0.15)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
-              }}
-            >
-                <ArrowLeftIcon />
-                Back to Results
-              </button>
-            </div>
               {/* Main Content Area */}
               <div style={{
                 position: 'relative',
@@ -503,8 +403,8 @@ function TreatmentPathwayPage() {
               }}>
                 Personalized treatment recommendations based on your medical analysis
               </p>
-        </div>
-
+      </div>
+      
             {/* Dynamic Gradient Background Rectangle */}
             <div style={{
               position: 'absolute',
@@ -546,7 +446,7 @@ function TreatmentPathwayPage() {
                 </div>
               </div>
             </div>
-
+            
             {/* Four Simple White Boxes */}
             <div style={{
               display: 'grid',

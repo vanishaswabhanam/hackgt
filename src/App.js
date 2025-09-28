@@ -7,10 +7,12 @@ import TreatmentPathwayPage from './components/TreatmentPathwayPage';
 import ClinicalTrialPage from './components/ClinicalTrialPage';
 import ResearchPage from './components/ResearchPage';
 import PatientProfilePage from './components/PatientProfilePage';
+import FixedHeader from './components/FixedHeader';
 
 function App() {
   return (
     <div className="App">
+      <FixedHeader />
       <Routes>
         <Route path="/" element={<SimpleApolloHomePage />} />
         <Route path="/medical" element={<HomePage />} />

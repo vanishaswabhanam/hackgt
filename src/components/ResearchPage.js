@@ -140,7 +140,7 @@ function ResearchPage() {
   );
 
   return (
-    <div className="apollo-homepage">
+    <div className="apollo-homepage" style={{ paddingTop: '80px' }}>
       {/* Subtle background pattern */}
       <div className="apollo-background-pattern"></div>
       
@@ -161,31 +161,35 @@ function ResearchPage() {
       <div className="apollo-glow-1"></div>
       <div className="apollo-glow-2"></div>
       
-      {/* Header Navigation */}
-      <header className="apollo-header">
-        <div className="apollo-header-content">
-          <div className="apollo-header-inner">
-            {/* Logo/Brand */}
-            <div className="apollo-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-              <div className="apollo-logo-text">
-                APOLLO AI
-              </div>
-            </div>
-            
-            {/* Back Button */}
-            <div className="apollo-back-wrapper">
-              <button className="apollo-back-button" onClick={() => navigate('/results')}>
-                <ArrowLeftIcon />
-                Back to Results
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
       
       {/* Main content area */}
       <div className="apollo-main">
         <div className="apollo-content">
+          {/* Page Title */}
+          <div style={{
+            textAlign: 'center',
+            marginBottom: '4rem',
+            marginTop: '2rem'
+          }}>
+            <h1 style={{
+              fontSize: '3rem',
+              fontWeight: '700',
+              color: '#1E293B',
+              margin: '0 0 1rem 0',
+              letterSpacing: '-0.02em',
+              lineHeight: '1.2'
+            }}>
+              Relevant Research
+            </h1>
+            <p style={{
+              fontSize: '1.2rem',
+              color: '#64748B',
+              margin: '0',
+              lineHeight: '1.5'
+            }}>
+              Latest medical research papers and studies related to your condition
+            </p>
+          </div>
 
           {/* Loading State */}
           {isLoading && (
@@ -222,7 +226,7 @@ function ResearchPage() {
               {/* Gradient Background Rectangle - Square shaped for cards */}
               <div style={{
                 position: 'absolute',
-                top: '33%',
+                top: '45%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
                 width: '800px',
@@ -248,7 +252,7 @@ function ResearchPage() {
                 />
               </div>
               
-              <div className="apollo-articles-stack" style={{ position: 'relative', zIndex: 2 }}>
+              <div className="apollo-articles-stack" style={{ position: 'relative', zIndex: 2, marginTop: '-3rem' }}>
               {articles.map((article, index) => {
                 const isTopCard = index === currentCardIndex;
                 const stackPosition = (index - currentCardIndex + articles.length) % articles.length;

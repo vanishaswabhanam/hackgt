@@ -10,7 +10,22 @@ export default function SimpleApolloHomePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      // Calculate the maximum scroll position where white page is fully visible
+      // When scrollY * 0.2 = 90 (100 - 10), the white page is at translateY(10vh)
+      // So maxScroll = 90 / 0.2 = 450
+      const maxScroll = 450;
+      
+      if (currentScrollY <= maxScroll) {
+        setScrollY(currentScrollY);
+      } else {
+        // Prevent scrolling beyond the limit
+        window.scrollTo(0, maxScroll);
+        setScrollY(maxScroll);
+      }
+    };
+    
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -112,7 +127,7 @@ export default function SimpleApolloHomePage() {
   };
   const containerStyle = {
     width: '100vw',
-    minHeight: '200vh', // Make it scrollable
+    height: 'calc(100vh + 450px)', // Exact height to allow scrolling to the limit
     backgroundColor: 'white',
     position: 'relative',
     overflow: 'visible' // Allow scrolling
@@ -260,20 +275,6 @@ export default function SimpleApolloHomePage() {
           {/* Left Container */}
           <div style={leftContainerStyle}>
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.5rem' }}>
-            <div style={{ 
-              width: '24px', 
-              height: '24px', 
-              backgroundColor: '#0A2342', 
-              borderRadius: '4px',
-              marginRight: '0.75rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              fontSize: '14px',
-              fontWeight: 'bold'
-            }}>
-            </div>
             <h2 style={{ fontSize: '1.5rem', fontWeight: '600', margin: 0, color: '#1f2937' }}>
               Patient Information
             </h2>
@@ -299,20 +300,6 @@ export default function SimpleApolloHomePage() {
         {/* Right Container */}
         <div style={rightContainerStyle}>
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.5rem' }}>
-            <div style={{ 
-              width: '24px', 
-              height: '24px', 
-              backgroundColor: '#0A2342', 
-              borderRadius: '4px',
-              marginRight: '0.75rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              fontSize: '14px',
-              fontWeight: 'bold'
-            }}>
-            </div>
             <h2 style={{ fontSize: '1.5rem', fontWeight: '600', margin: 0, color: '#1f2937' }}>
               Medical Images
             </h2>

@@ -22,45 +22,108 @@ const PatientProfile = ({ structuredData, originalText, imageData }) => {
   };
 
   return (
-    <div style={{ 
-      position: 'relative', 
-      zIndex: 2, 
-      display: 'flex', 
-      flexDirection: 'column',
-      gap: '2rem', 
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: '0 2rem',
-      marginTop: '5vh'
-    }}>
-      {/* Patient Information Card */}
-      <div style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-        borderRadius: '20px',
-        padding: '2rem',
-        width: '100%',
-        maxWidth: '800px',
-        minHeight: '200px',
-        transition: 'all 0.3s ease',
-        backdropFilter: 'blur(10px)',
-        border: '1px solid rgba(255, 255, 255, 0.2)',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-        userSelect: 'none',
-        WebkitUserSelect: 'none',
-        MozUserSelect: 'none',
-        msUserSelect: 'none',
-        display: 'flex',
+    <>
+      <style>
+        {`
+          .patient-card .card-title::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #80CBC4, #38BDF8);
+            transition: width 0.25s ease-out;
+          }
+          
+          .patient-card:hover .card-title::after {
+            width: 100%;
+          }
+          
+          .patient-card {
+            transition: all 0.2s ease-out !important;
+          }
+          
+          .patient-card:hover {
+            transform: translateY(-6px) !important;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2) !important;
+          }
+        `}
+      </style>
+      <div style={{ 
+        position: 'relative', 
+        zIndex: 2, 
+        display: 'flex', 
         flexDirection: 'column',
-        position: 'relative',
-        overflow: 'hidden'
+        gap: '2rem', 
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '0 2rem',
+        marginTop: '2rem'
       }}>
-        <h3 style={{
-          fontSize: '1.5rem',
-          fontWeight: '600',
-          margin: '0 0 1.5rem 0',
-          color: '#1E293B',
-          lineHeight: '1.3'
+        {/* Page Title */}
+        <div style={{
+          width: '100%',
+          maxWidth: '800px',
+          textAlign: 'left',
+          marginBottom: '3rem',
+          marginTop: '4rem'
         }}>
+          <h1 style={{
+            fontSize: '3rem',
+            fontWeight: '700',
+            color: '#1E293B',
+            margin: '0',
+            letterSpacing: '-0.02em',
+            lineHeight: '1.2'
+          }}>
+            Patient Profile
+          </h1>
+        </div>
+      {/* Patient Information Card */}
+      <div 
+        className="patient-card"
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          borderRadius: '20px',
+          padding: '2rem',
+          width: '100%',
+          maxWidth: '800px',
+          minHeight: '200px',
+          transition: 'all 0.3s ease',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+          userSelect: 'none',
+          WebkitUserSelect: 'none',
+          MozUserSelect: 'none',
+          msUserSelect: 'none',
+          display: 'flex',
+          flexDirection: 'column',
+          position: 'relative',
+          overflow: 'hidden',
+          cursor: 'pointer'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'translateY(-4px)';
+          e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.15)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'translateY(0)';
+          e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
+        }}>
+        <h3 
+          className="card-title"
+          style={{
+            fontSize: '1.5rem',
+            fontWeight: '600',
+            margin: '0 0 1.5rem 0',
+            color: '#1E293B',
+            lineHeight: '1.3',
+            position: 'relative',
+            display: 'inline-block'
+          }}
+        >
           Patient Information
         </h3>
         <div style={{
@@ -105,33 +168,49 @@ const PatientProfile = ({ structuredData, originalText, imageData }) => {
       </div>
 
       {/* Medical Condition Card */}
-      <div style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-        borderRadius: '20px',
-        padding: '2rem',
-        width: '100%',
-        maxWidth: '800px',
-        minHeight: '200px',
-        transition: 'all 0.3s ease',
-        backdropFilter: 'blur(10px)',
-        border: '1px solid rgba(255, 255, 255, 0.2)',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-        userSelect: 'none',
-        WebkitUserSelect: 'none',
-        MozUserSelect: 'none',
-        msUserSelect: 'none',
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'relative',
-        overflow: 'hidden'
-      }}>
-        <h3 style={{
-          fontSize: '1.5rem',
-          fontWeight: '600',
-          margin: '0 0 1.5rem 0',
-          color: '#1E293B',
-          lineHeight: '1.3'
+      <div 
+        className="patient-card"
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          borderRadius: '20px',
+          padding: '2rem',
+          width: '100%',
+          maxWidth: '800px',
+          minHeight: '200px',
+          transition: 'all 0.3s ease',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+          userSelect: 'none',
+          WebkitUserSelect: 'none',
+          MozUserSelect: 'none',
+          msUserSelect: 'none',
+          display: 'flex',
+          flexDirection: 'column',
+          position: 'relative',
+          overflow: 'hidden',
+          cursor: 'pointer'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'translateY(-4px)';
+          e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.15)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'translateY(0)';
+          e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
         }}>
+        <h3 
+          className="card-title"
+          style={{
+            fontSize: '1.5rem',
+            fontWeight: '600',
+            margin: '0 0 1.5rem 0',
+            color: '#1E293B',
+            lineHeight: '1.3',
+            position: 'relative',
+            display: 'inline-block'
+          }}
+        >
           Medical Condition
         </h3>
         <div style={{
@@ -241,33 +320,49 @@ const PatientProfile = ({ structuredData, originalText, imageData }) => {
 
       {/* Current Treatments Card */}
       {treatments.length > 0 && (
-        <div style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.95)',
-          borderRadius: '20px',
-          padding: '2rem',
-          width: '100%',
-          maxWidth: '800px',
-          minHeight: '200px',
-          transition: 'all 0.3s ease',
-          backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-          userSelect: 'none',
-          WebkitUserSelect: 'none',
-          MozUserSelect: 'none',
-          msUserSelect: 'none',
-          display: 'flex',
-          flexDirection: 'column',
-          position: 'relative',
-          overflow: 'hidden'
-        }}>
-          <h3 style={{
-            fontSize: '1.5rem',
-            fontWeight: '600',
-            margin: '0 0 1.5rem 0',
-            color: '#1E293B',
-            lineHeight: '1.3'
+        <div 
+          className="patient-card"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            borderRadius: '20px',
+            padding: '2rem',
+            width: '100%',
+            maxWidth: '800px',
+            minHeight: '200px',
+            transition: 'all 0.3s ease',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+            MozUserSelect: 'none',
+            msUserSelect: 'none',
+            display: 'flex',
+            flexDirection: 'column',
+            position: 'relative',
+            overflow: 'hidden',
+            cursor: 'pointer'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-4px)';
+            e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.15)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
           }}>
+          <h3 
+            className="card-title"
+            style={{
+              fontSize: '1.5rem',
+              fontWeight: '600',
+              margin: '0 0 1.5rem 0',
+              color: '#1E293B',
+              lineHeight: '1.3',
+              position: 'relative',
+              display: 'inline-block'
+            }}
+          >
             Current Treatments
           </h3>
           <div style={{
@@ -312,33 +407,49 @@ const PatientProfile = ({ structuredData, originalText, imageData }) => {
 
       {/* Medical History Card */}
       {medicalHistory && Object.keys(medicalHistory).length > 0 && (
-        <div style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.95)',
-          borderRadius: '20px',
-          padding: '2rem',
-          width: '100%',
-          maxWidth: '800px',
-          minHeight: '200px',
-          transition: 'all 0.3s ease',
-          backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-          userSelect: 'none',
-          WebkitUserSelect: 'none',
-          MozUserSelect: 'none',
-          msUserSelect: 'none',
-          display: 'flex',
-          flexDirection: 'column',
-          position: 'relative',
-          overflow: 'hidden'
-        }}>
-          <h3 style={{
-            fontSize: '1.5rem',
-            fontWeight: '600',
-            margin: '0 0 1.5rem 0',
-            color: '#1E293B',
-            lineHeight: '1.3'
+        <div 
+          className="patient-card"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            borderRadius: '20px',
+            padding: '2rem',
+            width: '100%',
+            maxWidth: '800px',
+            minHeight: '200px',
+            transition: 'all 0.3s ease',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+            MozUserSelect: 'none',
+            msUserSelect: 'none',
+            display: 'flex',
+            flexDirection: 'column',
+            position: 'relative',
+            overflow: 'hidden',
+            cursor: 'pointer'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-4px)';
+            e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.15)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
           }}>
+          <h3 
+            className="card-title"
+            style={{
+              fontSize: '1.5rem',
+              fontWeight: '600',
+              margin: '0 0 1.5rem 0',
+              color: '#1E293B',
+              lineHeight: '1.3',
+              position: 'relative',
+              display: 'inline-block'
+            }}
+          >
             Medical History
           </h3>
           <div style={{
@@ -364,33 +475,49 @@ const PatientProfile = ({ structuredData, originalText, imageData }) => {
 
       {/* Treatment Recommendations Card */}
       {structuredData.treatment_recommendations && (
-        <div style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.95)',
-          borderRadius: '20px',
-          padding: '2rem',
-          width: '100%',
-          maxWidth: '800px',
-          minHeight: '200px',
-          transition: 'all 0.3s ease',
-          backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-          userSelect: 'none',
-          WebkitUserSelect: 'none',
-          MozUserSelect: 'none',
-          msUserSelect: 'none',
-          display: 'flex',
-          flexDirection: 'column',
-          position: 'relative',
-          overflow: 'hidden'
-        }}>
-          <h3 style={{
-            fontSize: '1.5rem',
-            fontWeight: '600',
-            margin: '0 0 1.5rem 0',
-            color: '#1E293B',
-            lineHeight: '1.3'
+        <div 
+          className="patient-card"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            borderRadius: '20px',
+            padding: '2rem',
+            width: '100%',
+            maxWidth: '800px',
+            minHeight: '200px',
+            transition: 'all 0.3s ease',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+            MozUserSelect: 'none',
+            msUserSelect: 'none',
+            display: 'flex',
+            flexDirection: 'column',
+            position: 'relative',
+            overflow: 'hidden',
+            cursor: 'pointer'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-4px)';
+            e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.15)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
           }}>
+          <h3 
+            className="card-title"
+            style={{
+              fontSize: '1.5rem',
+              fontWeight: '600',
+              margin: '0 0 1.5rem 0',
+              color: '#1E293B',
+              lineHeight: '1.3',
+              position: 'relative',
+              display: 'inline-block'
+            }}
+          >
             Treatment Recommendations
           </h3>
           <div style={{
@@ -456,6 +583,7 @@ const PatientProfile = ({ structuredData, originalText, imageData }) => {
         </p>
       </div>
     </div>
+    </>
   );
 };
 

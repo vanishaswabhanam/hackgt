@@ -34,7 +34,7 @@ function PatientProfilePage() {
   };
 
   return (
-    <div className="apollo-homepage">
+    <div className="apollo-homepage" style={{ paddingTop: '80px' }}>
       {/* Subtle background pattern */}
       <div className="apollo-background-pattern"></div>
       
@@ -55,20 +55,6 @@ function PatientProfilePage() {
       <div className="apollo-glow-1"></div>
       <div className="apollo-glow-2"></div>
       
-      {/* Header Navigation */}
-      <header className="apollo-header">
-        <div className="apollo-header-content">
-          <div className="apollo-header-inner">
-            {/* Logo/Brand */}
-            <div className="apollo-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-              <div className="apollo-logo-text">
-                APOLLO AI
-              </div>
-            </div>
-            
-          </div>
-        </div>
-      </header>
       
       {/* Main content area */}
       <div className="apollo-main">

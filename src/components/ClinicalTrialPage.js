@@ -175,81 +175,33 @@ function ClinicalTrialPage() {
           }
         `}
       </style>
-      <div className="apollo-homepage" style={{ backgroundColor: '#F3F4F6', minHeight: '100vh', position: 'relative' }}>
-        {/* Dynamic Gradient Rectangle - Behind everything */}
-        <div style={{
-          position: 'fixed',
-          top: '0',
-          right: '0',
-          width: '25vw',
-          height: '100vh',
-          borderRadius: '0',
-          zIndex: 1,
-          overflow: 'hidden'
-        }}>
-          <HeroSection
-            title=""
-            highlightText=""
-            description=""
-            buttonText=""
-            colors={contrastedColors}
-            distortion={1.2}
-            swirl={0.8}
-            speed={1.0}
-            offsetX={0.1}
-            className=""
-            veilOpacity="bg-white/10"
-            maxWidth="max-w-none"
-          />
-        </div>
-
-        {/* Modern Header */}
-        <div style={{
-          position: 'relative',
-          zIndex: 10,
-          padding: '2rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}>
-          {/* Logo */}
-          <div 
-            onClick={() => navigate('/')} 
-            style={{ 
-              cursor: 'pointer',
-              fontSize: '2rem',
-              fontWeight: '700',
-              color: '#1E293B',
-              fontFamily: 'Rajdhani, sans-serif'
-            }}
-          >
-            APOLLO AI
-          </div>
-          
-          {/* Back Button */}
-          <button 
-            onClick={() => navigate('/results')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.75rem 1.5rem',
-              backgroundColor: 'rgba(255, 255, 255, 0.9)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              borderRadius: '12px',
-              color: '#1E293B',
-              fontSize: '1rem',
-              fontWeight: '500',
-              cursor: 'pointer',
-              backdropFilter: 'blur(10px)',
-              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
-              transition: 'all 0.3s ease'
-            }}
-          >
-            <ArrowLeftIcon />
-            Back to Results
-          </button>
-        </div>
+          <div className="apollo-homepage" style={{ backgroundColor: '#F3F4F6', minHeight: '100vh', position: 'relative', paddingTop: '80px' }}>
+            {/* Dynamic Gradient Rectangle - Behind everything */}
+            <div style={{
+              position: 'fixed',
+              top: '0',
+              right: '0',
+              width: '25vw',
+              height: '100vh',
+              borderRadius: '0',
+              zIndex: 1,
+              overflow: 'hidden'
+            }}>
+              <HeroSection
+                title=""
+                highlightText=""
+                description=""
+                buttonText=""
+                colors={contrastedColors}
+                distortion={1.2}
+                swirl={0.8}
+                speed={1.0}
+                offsetX={0.1}
+                className=""
+                veilOpacity="bg-white/10"
+                maxWidth="max-w-none"
+              />
+            </div>
       
         {/* Main Content Area */}
         <div style={{

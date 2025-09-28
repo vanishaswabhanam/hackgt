@@ -202,8 +202,8 @@ function extractSearchTermsWithPriority(structuredData) {
   const priorityTerms = {
     critical: [], // Condition (most important)
     high: [],     // Diagnosis tests and treatments
-    medium: [],   // Symptoms and medical history
-    low: []       // Visit motivation and other terms
+    medium: [],   // Not used - keeping for compatibility
+    low: []       // Not used - keeping for compatibility
   };
   
   // CRITICAL PRIORITY: Extract condition from diagnosis tests
@@ -234,25 +234,6 @@ function extractSearchTermsWithPriority(structuredData) {
         priorityTerms.high.push(treatment['related condition']);
       }
     });
-  }
-  
-  // MEDIUM PRIORITY: Extract from symptoms
-  if (structuredData.symptoms && Array.isArray(structuredData.symptoms)) {
-    structuredData.symptoms.forEach(symptom => {
-      if (symptom['name of symptom'] && symptom['name of symptom'] !== 'None') {
-        priorityTerms.medium.push(symptom['name of symptom']);
-      }
-    });
-  }
-  
-  // MEDIUM PRIORITY: Extract from medical history
-  if (structuredData['patient medical history'] && structuredData['patient medical history']['physiological context'] !== 'None') {
-    priorityTerms.medium.push(structuredData['patient medical history']['physiological context']);
-  }
-  
-  // LOW PRIORITY: Extract from visit motivation
-  if (structuredData['visit motivation'] && structuredData['visit motivation'] !== 'None') {
-    priorityTerms.low.push(structuredData['visit motivation']);
   }
   
   // Filter out empty terms
@@ -348,24 +329,7 @@ async function searchPubMedWithPriority(structuredData, maxResults = 10) {
       });
     }
     
-    // Medium priority query: Symptoms and medical history
-    if (priorityTerms.medium.length > 0) {
-      queries.push({
-        query: priorityTerms.medium.join(' AND '),
-        priority: 'medium',
-        weight: 2
-      });
-    }
-    
-    // Combined query: All terms
-    const allTerms = [...priorityTerms.critical, ...priorityTerms.high, ...priorityTerms.medium, ...priorityTerms.low];
-    if (allTerms.length > 0) {
-      queries.push({
-        query: allTerms.join(' AND '),
-        priority: 'combined',
-        weight: 1
-      });
-    }
+    // Only use critical and high priority queries - no medium or combined queries
     
     if (queries.length === 0) {
       return { articles: [], total: 0, query: '', message: 'No searchable terms found' };
