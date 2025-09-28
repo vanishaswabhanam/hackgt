@@ -162,68 +162,6 @@ function ResearchPage() {
       {/* Main content area */}
       <div className="apollo-main">
         <div className="apollo-content">
-          {/* Page Title */}
-          <div className="apollo-section apollo-title-section">
-            <div className="apollo-section-glow"></div>
-            <div className="apollo-section-content">
-              <div className="apollo-section-header">
-                <div className="apollo-section-icon">
-                  <BookOpenIcon />
-                </div>
-                <label className="apollo-section-label">
-                  Relevant Research
-                </label>
-              </div>
-            </div>
-          </div>
-
-          {/* Search Section */}
-          <div className="apollo-section">
-            <div className="apollo-section-glow"></div>
-            <div className="apollo-section-content">
-              <div className="apollo-section-header">
-                <div className="apollo-section-icon">
-                  <SearchIcon />
-                </div>
-                <label className="apollo-section-label">
-                  Search PubMed
-                </label>
-              </div>
-              
-              <div className="apollo-search-container">
-                <div className="apollo-input-group">
-                  <input 
-                    type="text" 
-                    className="apollo-search-input"
-                    placeholder="Enter medical terms to search..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleManualSearch()}
-                  />
-                </div>
-                
-                <div className="apollo-search-actions">
-                  <button 
-                    className="apollo-button apollo-button-primary" 
-                    onClick={handleManualSearch}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? (
-                      <>
-                        <SpinnerIcon />
-                        Searching...
-                      </>
-                    ) : (
-                      <>
-                        <SearchIcon />
-                        Search PubMed
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
 
           {/* Loading State */}
           {isLoading && (
@@ -337,47 +275,54 @@ function ResearchPage() {
             </div>
           )}
 
-          {/* Research Categories */}
+          {/* Search Section */}
           <div className="apollo-section">
             <div className="apollo-section-glow"></div>
             <div className="apollo-section-content">
               <div className="apollo-section-header">
                 <div className="apollo-section-icon">
-                  <BarChartIcon />
+                  <SearchIcon />
                 </div>
                 <label className="apollo-section-label">
-                  Research Categories
+                  Search PubMed
                 </label>
               </div>
               
-              <div className="apollo-categories-grid">
-                <div className="apollo-category-card">
-                  <h4 className="apollo-category-title">Treatment Studies</h4>
-                  <p className="apollo-category-count">
-                    {articles.filter(a => a.title.toLowerCase().includes('treatment')).length} papers
-                  </p>
+              <div className="apollo-search-container">
+                <div className="apollo-input-group">
+                  <input 
+                    type="text" 
+                    className="apollo-search-input"
+                    placeholder="Enter medical terms to search..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleManualSearch()}
+                  />
                 </div>
-                <div className="apollo-category-card">
-                  <h4 className="apollo-category-title">Diagnostic Methods</h4>
-                  <p className="apollo-category-count">
-                    {articles.filter(a => a.title.toLowerCase().includes('diagnosis')).length} papers
-                  </p>
-                </div>
-                <div className="apollo-category-card">
-                  <h4 className="apollo-category-title">Clinical Trials</h4>
-                  <p className="apollo-category-count">
-                    {articles.filter(a => a.title.toLowerCase().includes('trial')).length} papers
-                  </p>
-                </div>
-                <div className="apollo-category-card">
-                  <h4 className="apollo-category-title">Case Studies</h4>
-                  <p className="apollo-category-count">
-                    {articles.filter(a => a.title.toLowerCase().includes('case')).length} papers
-                  </p>
+                
+                <div className="apollo-search-actions">
+                  <button 
+                    className="apollo-button apollo-button-primary" 
+                    onClick={handleManualSearch}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <SpinnerIcon />
+                        Searching...
+                      </>
+                    ) : (
+                      <>
+                        <SearchIcon />
+                        Search PubMed
+                      </>
+                    )}
+                  </button>
                 </div>
               </div>
             </div>
           </div>
+
 
         </div>
       </div>

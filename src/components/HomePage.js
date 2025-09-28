@@ -200,13 +200,15 @@ function HomePage() {
         <div className="apollo-content">
           {/* Doctor Notes Section */}
           <div className="apollo-section">
-            <div className="apollo-section-glow"></div>
             <div className="apollo-section-content">
               <div className="apollo-section-header">
-                <div className="apollo-section-icon">
-                  <SearchIcon />
-                </div>
-                <label htmlFor="doctor-notes" className="apollo-section-label">
+                <label htmlFor="doctor-notes" className="apollo-section-label" style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '600',
+                  color: '#1E293B',
+                  lineHeight: '1.3',
+                  margin: '0 0 1rem 0'
+                }}>
                   Doctor Notes
                 </label>
               </div>
@@ -216,32 +218,57 @@ function HomePage() {
                 onChange={(e) => setTextInput(e.target.value)}
                 placeholder="Enter in patient details and diagnoses..."
                 className="apollo-textarea"
+                style={{
+                  fontSize: '0.85rem',
+                  color: '#64748B',
+                  lineHeight: '1.5'
+                }}
               />
             </div>
           </div>
           
           {/* Medical Images & Files Section */}
           <div className="apollo-section">
-            <div className="apollo-section-glow"></div>
             <div className="apollo-section-content">
               <div className="apollo-section-header">
-                <div className="apollo-section-icon">
-                  <UploadIcon />
-                </div>
-                <label className="apollo-section-label">
+                <label className="apollo-section-label" style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '600',
+                  color: '#1E293B',
+                  lineHeight: '1.3',
+                  margin: '0 0 1rem 0'
+                }}>
                   Medical Images & Files
                 </label>
               </div>
               <div className="apollo-upload-zone">
-                <UploadIcon className="apollo-upload-icon" />
-                <p className="apollo-upload-title">
+                <p className="apollo-upload-title" style={{
+                  fontSize: '0.85rem',
+                  color: '#64748B',
+                  lineHeight: '1.5',
+                  margin: '0 0 0.5rem 0'
+                }}>
                   Upload medical images, scans, or research files
                 </p>
-                <p className="apollo-upload-description">
+                <p className="apollo-upload-description" style={{
+                  fontSize: '0.85rem',
+                  color: '#64748B',
+                  lineHeight: '1.5',
+                  margin: '0 0 1rem 0'
+                }}>
                   DICOM, PNG, JPG, PDF up to 50MB • Drag and drop or click to browse
                 </p>
                 {selectedFile && (
-                  <div style={{ marginTop: '16px', padding: '8px 16px', background: '#e8f5e8', color: '#2d5a2d', borderRadius: '6px', fontSize: '14px', fontWeight: '500' }}>
+                  <div style={{ 
+                    marginTop: '16px', 
+                    padding: '8px 16px', 
+                    background: '#e8f5e8', 
+                    color: '#2d5a2d', 
+                    borderRadius: '6px', 
+                    fontSize: '0.85rem', 
+                    fontWeight: '500',
+                    lineHeight: '1.5'
+                  }}>
                     Selected: {selectedFile.name}
                   </div>
                 )}

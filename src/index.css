@@ -1269,7 +1269,7 @@ code {
   background: white;
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(128, 203, 196, 0.3);
+  border: none;
   transition: all 0.3s ease;
   height: fit-content;
   break-inside: avoid;
@@ -1307,11 +1307,7 @@ code {
   margin-bottom: 16px;
 }
 
-.apollo-section-icon {
-  padding: 8px;
-  background: #80CBC4;
-  border-radius: 6px;
-}
+
 
 .apollo-section-icon svg {
   width: 20px;
@@ -1545,6 +1541,10 @@ code {
 .apollo-filename-label {
   font-weight: 500;
   color: #64748b;
+}
+
+.apollo-section-icon {
+  display: none !important;
 }
 
 .apollo-filename-value {

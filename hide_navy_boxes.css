@@ -1,0 +1,4 @@
+/* Add this rule to your src/index.css file to hide the navy boxes */
+.apollo-section-icon {
+  display: none !important;
+}
