@@ -97,13 +97,6 @@ function ResultsPage() {
               </div>
             </div>
             
-            {/* Back Button */}
-            <div className="apollo-back-wrapper">
-              <button className="apollo-back-button" onClick={() => navigate('/')}>
-                <ArrowLeftIcon />
-                Back to Home
-              </button>
-            </div>
           </div>
         </div>
       </header>

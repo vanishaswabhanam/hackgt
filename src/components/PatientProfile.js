@@ -33,7 +33,7 @@ const PatientProfile = ({ structuredData, originalText, imageData }) => {
   return (
     <div className="apollo-profile-content">
       <div className="apollo-profile-header">
-        <h2 className="apollo-profile-title">👤 Patient Profile Created</h2>
+        <h2 className="apollo-profile-title">Patient Profile</h2>
         <p className="apollo-profile-subtitle">Based on medical analysis and imaging data</p>
       </div>
 

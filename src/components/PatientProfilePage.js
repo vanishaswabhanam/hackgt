@@ -55,13 +55,6 @@ function PatientProfilePage() {
               </div>
             </div>
             
-            {/* Back Button */}
-            <div className="apollo-signin-wrapper">
-              <div className="apollo-signin-glow"></div>
-              <button className="apollo-signin-button" onClick={handleBackToHome}>
-                ← Back to Analysis
-              </button>
-            </div>
           </div>
         </div>
       </header>
