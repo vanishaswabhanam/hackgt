@@ -253,37 +253,38 @@ function HomePage() {
                   multiple
                 />
               </div>
-              
-              <button 
-                className="apollo-button" 
-                onClick={async () => {
-                  await handleSubmit();
-                  if (textInput.trim() || selectedFile) {
-                    // Pass image data through navigation state
-                    const imageData = selectedFile ? result : null;
-                    navigate('/patient-profile', { 
-                      state: { 
-                        imageData: imageData 
-                      } 
-                    });
-                  }
-                }}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <div className="apollo-loading">
-                    <div className="apollo-spinner"></div>
-                    Processing...
-                  </div>
-                ) : (
-                  <>
-                    <SearchIcon />
-                    Analyze Patient Data
-                  </>
-                )}
-              </button>
             </div>
           </div>
+          
+          {/* Analyze Button */}
+          <button 
+            className="apollo-button apollo-analyze-button" 
+            onClick={async () => {
+              await handleSubmit();
+              if (textInput.trim() || selectedFile) {
+                // Pass image data through navigation state
+                const imageData = selectedFile ? result : null;
+                navigate('/patient-profile', { 
+                  state: { 
+                    imageData: imageData 
+                  } 
+                });
+              }
+            }}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <div className="apollo-loading">
+                <div className="apollo-spinner"></div>
+                Processing...
+              </div>
+            ) : (
+              <>
+                <SearchIcon />
+                Analyze Patient Data
+              </>
+            )}
+          </button>
         </div>
       </div>
 

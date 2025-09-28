@@ -199,6 +199,8 @@ code {
   color: #1a1a1a;
   resize: vertical;
   min-height: 120px;
+  max-height: 400px;
+  overflow-y: auto;
   transition: border-color 0.2s ease;
 }
 
@@ -1204,13 +1206,20 @@ code {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 64px 32px;
+  padding: 32px 32px;
 }
 
 .apollo-content {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 16px;
+}
+
+.apollo-analyze-button {
+  width: 100%;
+  height: 50px;
+  font-size: 16px;
+  font-weight: 600;
 }
 
 /* Research Query Section */
@@ -1223,7 +1232,7 @@ code {
   transition: all 0.3s ease;
   height: fit-content;
   break-inside: avoid;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .apollo-section-glow {
@@ -1282,8 +1291,10 @@ code {
   width: 100%;
   padding: 16px;
   border-radius: 6px;
-  min-height: 120px;
-  resize: none;
+  min-height: 300px;
+  max-height: 500px;
+  overflow-y: auto;
+  resize: vertical;
   font-family: inherit;
   font-size: 14px;
   transition: all 0.2s ease;
@@ -1303,7 +1314,7 @@ code {
 .apollo-upload-zone {
   border: 2px dashed #80CBC4;
   border-radius: 8px;
-  padding: 48px 24px;
+  padding: 6px 8px;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -1316,10 +1327,10 @@ code {
 }
 
 .apollo-upload-icon {
-  width: 48px;
-  height: 48px;
+  width: 12px;
+  height: 12px;
   color: #80CBC4;
-  margin: 0 auto 16px;
+  margin: 0 auto 4px;
   transition: color 0.2s ease;
 }
 
@@ -1487,7 +1498,7 @@ code {
 .apollo-results-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  filter: brightness(0.85);
+  filter: brightness(0.90);
 }
 
 .apollo-results-card:hover .apollo-section-glow {
@@ -2201,8 +2212,9 @@ code {
     padding: 16px;
   }
   
-  .apollo-upload-zone {
-    padding: 32px 16px;
+  .apollo-analyze-button {
+    height: 45px;
+    font-size: 14px;
   }
   
   .apollo-results-grid {
