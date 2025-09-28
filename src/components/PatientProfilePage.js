@@ -1,10 +1,21 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import PatientProfile from './PatientProfile';
+import { HeroSection } from './ui/hero-section-with-smooth-bg-shader';
 
 function PatientProfilePage() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Same colors as homepage for consistency
+  const contrastedColors = [
+    "#D4E8F7", // More visible blue
+    "#D4F0E8", // More visible green
+    "#80CBC4", // Pastel Teal (replacing warm orange)
+    "#38BDF8", // Bright Sky (replacing light peach)
+    "#E0F0D4", // More visible mint
+    "#E8E8E8"  // More visible gray
+  ];
 
   // Get data from location state
   const { structuredData, originalText, imageData } = location.state || {};
@@ -61,11 +72,45 @@ function PatientProfilePage() {
       
       {/* Main content area */}
       <div className="apollo-main">
-        <PatientProfile 
-          structuredData={fallbackStructuredData}
-          originalText={fallbackOriginalText}
-          imageData={fallbackImageData}
-        />
+        <div className="apollo-content">
+          {/* Fixed Gradient Background Rectangle */}
+          <div style={{
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '95vw',
+            height: '60vh',
+            borderRadius: '40px',
+            zIndex: 1,
+            overflow: 'hidden',
+            pointerEvents: 'none'
+          }}>
+            <HeroSection
+              title=""
+              highlightText=""
+              description=""
+              buttonText=""
+              colors={contrastedColors}
+              distortion={1.2}
+              swirl={0.8}
+              speed={1.0}
+              offsetX={0.1}
+              className=""
+              veilOpacity="bg-white/10"
+              maxWidth="max-w-none"
+            />
+          </div>
+          
+          {/* Patient Profile Content */}
+          <div style={{ position: 'relative', zIndex: 2 }}>
+            <PatientProfile 
+              structuredData={fallbackStructuredData}
+              originalText={fallbackOriginalText}
+              imageData={fallbackImageData}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

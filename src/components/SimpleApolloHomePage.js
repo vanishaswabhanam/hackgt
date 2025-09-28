@@ -146,7 +146,7 @@ export default function SimpleApolloHomePage() {
     width: '100vw',
     height: '100vh',
     backgroundColor: 'white',
-    transform: `translateY(${Math.max(0, 100 - scrollY * 0.2)}vh)`,
+    transform: `translateY(${Math.max(10, 100 - scrollY * 0.2)}vh)`,
     transition: 'transform 0.1s ease-out',
     zIndex: 30,
     display: 'flex',
@@ -215,7 +215,7 @@ export default function SimpleApolloHomePage() {
             fontFamily: 'Rajdhani, sans-serif',
             opacity: fadeOpacity
           }}>
-            APOLLO
+            APOLLO AI
           </h1>
           <p style={{
             fontSize: '1.2rem',
@@ -314,7 +314,7 @@ export default function SimpleApolloHomePage() {
             }}>
             </div>
             <h2 style={{ fontSize: '1.5rem', fontWeight: '600', margin: 0, color: '#1f2937' }}>
-              AI Analysis
+              Medical Images
             </h2>
           </div>
           <div style={{
@@ -331,9 +331,6 @@ export default function SimpleApolloHomePage() {
             position: 'relative'
           }}>
             <div style={{ fontSize: '3rem', marginBottom: '1rem' }}></div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: '500', margin: '0 0 0.5rem 0', color: '#374151' }}>
-              Upload Medical Data
-            </h3>
             <p style={{ fontSize: '0.875rem', color: '#6b7280', margin: '0 0 1rem 0' }}>
               Upload scans, images, or research files for AI analysis
             </p>
