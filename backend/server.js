@@ -1034,7 +1034,11 @@ app.post('/api/classify-brain-tumor', upload.single('image'), async (req, res) =
 
     res.json({
       success: true,
-      prediction: prediction,
+      predicted_class: prediction.predicted_class,
+      confidence: prediction.confidence,
+      probabilities: prediction.probabilities,
+      class_index: prediction.class_index,
+      model_info: prediction.model_info,
       filename: req.file.originalname,
       model_used: 'Pretrained-ResNet50-BrainTumor',
       inference_time: '< 1 second'
