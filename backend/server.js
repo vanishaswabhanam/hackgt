@@ -725,6 +725,70 @@ async function searchClinicalTrials(searchTerms, status = 'Recruiting', maxResul
   }
 }
 
+// Fallback function to generate basic structured data without Gemini
+function generateFallbackStructuredData(inputText) {
+  // Simple keyword extraction and basic structure
+  const words = inputText.toLowerCase().split(/\s+/);
+  
+  // Extract basic symptoms (simple keyword matching)
+  const symptomKeywords = ['pain', 'headache', 'fever', 'nausea', 'vomiting', 'cough', 'shortness', 'breath', 'chest', 'abdominal', 'dizziness', 'fatigue'];
+  const symptoms = [];
+  
+  symptomKeywords.forEach(keyword => {
+    if (words.some(word => word.includes(keyword))) {
+      symptoms.push({
+        'name of symptom': keyword,
+        'intensity of symptom': 'Unknown',
+        'location': 'Not specified',
+        'time': 'Not specified',
+        'temporalisation': 'Not specified',
+        'behaviours affecting the symptom': 'Not specified',
+        'details': 'Extracted from text analysis'
+      });
+    }
+  });
+  
+  // Basic structure following the medical template
+  return {
+    "visit motivation": inputText.substring(0, 100) + (inputText.length > 100 ? '...' : ''),
+    "admission": [],
+    "patient information": {
+      "age": "Not specified",
+      "sex": "Not specified",
+      "ethnicity": "Not specified",
+      "weight": "Not specified",
+      "height": "Not specified",
+      "family medical history": "Not specified",
+      "recent travels": "Not specified",
+      "socio economic context": "Not specified",
+      "occupation": "Not specified"
+    },
+    "patient medical history": {
+      "physiological context": "Not specified",
+      "psychological context": "Not specified",
+      "vaccination history": "Not specified",
+      "allergies": "Not specified",
+      "exercise frequency": "Not specified",
+      "nutrition": "Not specified",
+      "sexual history": "Not specified",
+      "alcohol consumption": "Not specified",
+      "drug usage": "Not specified",
+      "smoking status": "Not specified"
+    },
+    "surgeries": [],
+    "symptoms": symptoms,
+    "medical examinations": [],
+    "diagnosis tests": [],
+    "treatments": [],
+    "discharge": {
+      "reason": "Not specified",
+      "referral": "Not specified",
+      "follow up": "Not specified",
+      "discharge summary": "Not specified"
+    }
+  };
+}
+
 // Function to generate structured JSON using Gemini
 async function generateStructuredJSON(inputText, similarNotes) {
   try {
@@ -783,15 +847,31 @@ app.post('/api/analyze', async (req, res) => {
     // Search for similar notes
     const similarNotes = await searchSimilarNotes(text, 3);
     
-    // Generate structured JSON using Gemini
-    const structuredData = await generateStructuredJSON(text, similarNotes);
-    
-    res.json({
-      success: true,
-      input: text,
-      similarNotes: similarNotes.length,
-      structuredData: structuredData
-    });
+    try {
+      // Generate structured JSON using Gemini
+      const structuredData = await generateStructuredJSON(text, similarNotes);
+      
+      res.json({
+        success: true,
+        input: text,
+        similarNotes: similarNotes.length,
+        structuredData: structuredData
+      });
+    } catch (geminiError) {
+      console.log('Gemini API unavailable, using fallback structured data');
+      
+      // Fallback: Generate basic structured data without Gemini
+      const fallbackData = generateFallbackStructuredData(text);
+      
+      res.json({
+        success: true,
+        input: text,
+        similarNotes: similarNotes.length,
+        structuredData: fallbackData,
+        fallback: true,
+        message: 'Using fallback analysis due to API limitations'
+      });
+    }
     
   } catch (error) {
     console.error('Error in /api/analyze:', error);
