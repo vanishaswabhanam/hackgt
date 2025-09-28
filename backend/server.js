@@ -1025,13 +1025,20 @@ ${JSON.stringify(structuredData, null, 2)}
 
 ${originalText ? `Original Clinical Text: "${originalText}"` : ''}
 
-Please provide treatment recommendations in the following JSON format:
+Please provide treatment recommendations in the following JSON format. For immediateActions, provide exactly 10 comprehensive actions. For lifestyleModifications, provide exactly 10 detailed recommendations:
 
 {
   "immediateActions": [
     "Action 1",
     "Action 2",
-    "Action 3"
+    "Action 3",
+    "Action 4",
+    "Action 5",
+    "Action 6",
+    "Action 7",
+    "Action 8",
+    "Action 9",
+    "Action 10"
   ],
   "medicationRecommendations": {
     "primaryTreatment": "Specific medication or treatment name",
@@ -1043,7 +1050,14 @@ Please provide treatment recommendations in the following JSON format:
   "lifestyleModifications": [
     "Specific lifestyle change 1",
     "Specific lifestyle change 2",
-    "Specific lifestyle change 3"
+    "Specific lifestyle change 3",
+    "Specific lifestyle change 4",
+    "Specific lifestyle change 5",
+    "Specific lifestyle change 6",
+    "Specific lifestyle change 7",
+    "Specific lifestyle change 8",
+    "Specific lifestyle change 9",
+    "Specific lifestyle change 10"
   ],
   "followUpSchedule": [
     "2-week follow-up appointment",
