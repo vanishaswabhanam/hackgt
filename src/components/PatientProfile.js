@@ -11,6 +11,9 @@ const PatientProfile = ({ structuredData, originalText, imageData }) => {
   console.log('PatientProfile - imageData type:', typeof imageData);
   console.log('PatientProfile - imageData filename:', imageData?.filename);
   console.log('PatientProfile - imageData prediction:', imageData?.prediction);
+  console.log('PatientProfile - imageData predicted_class:', imageData?.predicted_class);
+  console.log('PatientProfile - imageData confidence:', imageData?.confidence);
+  console.log('PatientProfile - imageData confidence_score:', imageData?.confidence_score);
 
   // Extract patient information from structured data
   const patientInfo = structuredData['patient information'] || {};

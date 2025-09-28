@@ -1259,6 +1259,8 @@ code {
   height: 50px;
   font-size: 16px;
   font-weight: 600;
+  margin-top: 32px;
+  margin-bottom: 0;
 }
 
 /* Research Query Section */
@@ -1459,6 +1461,131 @@ code {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Image Analysis Styles */
+.apollo-image-analysis-content {
+  margin-top: 16px;
+}
+
+.apollo-image-analysis-result {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.apollo-prediction-card {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.apollo-prediction-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 16px 0;
+  text-align: center;
+}
+
+.apollo-prediction-result {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.apollo-prediction-label {
+  font-weight: 500;
+  color: #64748b;
+}
+
+.apollo-prediction-value {
+  font-weight: 600;
+  font-size: 16px;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.apollo-prediction-positive {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.apollo-prediction-warning {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.apollo-confidence-score {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.apollo-confidence-label {
+  font-weight: 500;
+  color: #64748b;
+}
+
+.apollo-confidence-value {
+  font-weight: 600;
+  color: #0A2342;
+}
+
+.apollo-image-filename {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.apollo-filename-label {
+  font-weight: 500;
+  color: #64748b;
+}
+
+.apollo-filename-value {
+  font-weight: 500;
+  color: #0A2342;
+  font-family: monospace;
+  background: #f1f5f9;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.apollo-analysis-insights {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.apollo-insights-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 12px 0;
+}
+
+.apollo-insights-content {
+  margin: 0;
+}
+
+.apollo-insight-text {
+  margin: 0;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.apollo-insight-positive {
+  color: #166534;
+}
+
+.apollo-insight-warning {
+  color: #92400e;
 }
 
 /* Results Display */
@@ -2254,6 +2381,7 @@ code {
   .apollo-analyze-button {
     height: 45px;
     font-size: 14px;
+    margin-top: 24px;
   }
   
   .apollo-results-grid {
