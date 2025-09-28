@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { HeroSection } from './ui/hero-section-with-smooth-bg-shader';
 
 function HomePage() {
   const [textInput, setTextInput] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState(null);
+  const [scrollY, setScrollY] = useState(0);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -86,207 +94,272 @@ function HomePage() {
     }
   };
 
-  // SVG Icons as components
-  const MenuIcon = () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="18" x2="21" y2="18"></line>
-    </svg>
-  );
+  // Simple fade out as you scroll
+  const fadeOpacity = Math.max(0, 1 - (scrollY * 0.002));
+  
+  const containerStyle = {
+    width: '100vw',
+    minHeight: '200vh', // Make it scrollable
+    backgroundColor: 'white',
+    position: 'relative',
+    overflow: 'visible' // Allow scrolling
+  };
 
-  const SearchIcon = () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="11" cy="11" r="8"></circle>
-      <path d="m21 21-4.35-4.35"></path>
-    </svg>
-  );
+  const gradientContainerStyle = {
+    position: 'relative',
+    width: '100vw',
+    height: '100vh',
+    overflow: 'hidden'
+  };
 
-  const UploadIcon = () => (
-    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
-      <polyline points="14,2 14,8 20,8"></polyline>
-      <line x1="16" y1="13" x2="8" y2="13"></line>
-      <line x1="16" y1="17" x2="8" y2="17"></line>
-      <polyline points="10,9 9,9 8,9"></polyline>
-    </svg>
-  );
+  const centerContentStyle = {
+    position: 'fixed',
+    top: '40vh',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    zIndex: 10,
+    textAlign: 'center',
+    transition: 'opacity 0.1s ease-out'
+  };
 
-  const FileTextIcon = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
-      <polyline points="14,2 14,8 20,8"></polyline>
-      <line x1="16" y1="13" x2="8" y2="13"></line>
-      <line x1="16" y1="17" x2="8" y2="17"></line>
-    </svg>
-  );
+  // Emerging white page that slides up from bottom
+  const emergingPageStyle = {
+    position: 'fixed',
+    bottom: 0,
+    left: 0,
+    width: '100vw',
+    height: '100vh',
+    backgroundColor: 'white',
+    transform: `translateY(${Math.max(0, 100 - scrollY * 0.2)}vh)`,
+    transition: 'transform 0.1s ease-out',
+    zIndex: 30,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '2rem 0',
+    gap: '2rem',
+    borderTopLeftRadius: '40px',
+    borderTopRightRadius: '40px'
+  };
 
-  const BarChart3Icon = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M3 3v18h18"></path>
-      <rect width="4" height="7" x="7" y="10" rx="1"></rect>
-      <rect width="4" height="12" x="15" y="5" rx="1"></rect>
-    </svg>
-  );
+  const leftContainerStyle = {
+    flex: 5,
+    backgroundColor: 'white',
+    borderRadius: '16px',
+    padding: '3rem 4rem',
+    boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+    border: '1px solid #e5e7eb',
+    height: '80vh',
+    display: 'flex',
+    flexDirection: 'column'
+  };
 
-  const DatabaseIcon = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
-      <path d="M3 5v14a9 3 0 0 0 18 0V5"></path>
-      <path d="M3 12a9 3 0 0 0 18 0"></path>
-    </svg>
-  );
+  const rightContainerStyle = {
+    flex: 5,
+    backgroundColor: 'white',
+    borderRadius: '16px',
+    padding: '3rem 4rem',
+    boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+    border: '1px solid #e5e7eb',
+    height: '80vh',
+    display: 'flex',
+    flexDirection: 'column'
+  };
+
+  // Updated colors with new color palette - only changing orange tones
+  const contrastedColors = [
+    "#D4E8F7", // More visible blue
+    "#D4F0E8", // More visible green
+    "#80CBC4", // Pastel Teal (replacing warm orange)
+    "#38BDF8", // Bright Sky (replacing light peach)
+    "#E0F0D4", // More visible mint
+    "#E8E8E8"  // More visible gray
+  ];
 
   return (
-    <div className="apollo-homepage">
-      {/* Subtle background pattern */}
-      <div className="apollo-background-pattern"></div>
-      
-      {/* Flowing lines background */}
-      <div className="flowing-lines-container">
-        <div className="flowing-line line-1"></div>
-        <div className="flowing-line line-2"></div>
-        <div className="flowing-line line-3"></div>
-        <div className="flowing-line line-4"></div>
-        <div className="flowing-line line-5"></div>
-        <div className="flowing-line line-6"></div>
-        <div className="flowing-line line-7"></div>
-        <div className="flowing-line line-8"></div>
-        <div className="flowing-line line-9"></div>
-      </div>
-      
-      {/* Subtle glow effects */}
-      <div className="apollo-glow-1"></div>
-      <div className="apollo-glow-2"></div>
-      
-      {/* Header Navigation */}
-      <header className="apollo-header">
-        <div className="apollo-header-content">
-          <div className="apollo-header-inner">
-            {/* Logo/Brand */}
-            <div className="apollo-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-              <div className="apollo-logo-text">
-                APOLLO AI
-              </div>
-            </div>
-            
-            {/* Navigation */}
-            <nav className="apollo-nav">
-              <button className="apollo-nav-button">
-                <FileTextIcon />
-                Research
-              </button>
-              <button className="apollo-nav-button">
-                <BarChart3Icon />
-                Analysis
-              </button>
-              <button className="apollo-nav-button">
-                <DatabaseIcon />
-                Reports
-              </button>
-              <div className="apollo-signin-wrapper">
-                <div className="apollo-signin-glow"></div>
-                <button className="apollo-signin-button">
-                  Sign In
-                </button>
-              </div>
-            </nav>
-          </div>
+    <div style={containerStyle}>
+      {/* Gradient Section with Border */}
+      <div style={gradientContainerStyle}>
+        {/* Centered Content */}
+        <div style={centerContentStyle}>
+          <h1 style={{ 
+            fontSize: '7rem', 
+            fontWeight: '900', 
+            color: '#1E293B', 
+            margin: 0,
+            letterSpacing: '-0.05em',
+            fontFamily: 'Rajdhani, sans-serif',
+            opacity: fadeOpacity
+          }}>
+            APOLLO
+          </h1>
+          <p style={{
+            fontSize: '1.2rem',
+            color: '#1E293B',
+            marginTop: '0.1rem',
+            fontWeight: '300',
+            maxWidth: '500px',
+            fontFamily: 'Georgia, serif',
+            opacity: fadeOpacity,
+            transition: 'opacity 0.1s ease-out'
+          }}>
+            Intelligent AI solutions for modern healthcare
+          </p>
         </div>
-      </header>
-      
-      {/* Main content area */}
-      <div className="apollo-main">
-        <div className="apollo-content">
-          {/* Doctor Notes Section */}
-          <div className="apollo-section">
-            <div className="apollo-section-glow"></div>
-            <div className="apollo-section-content">
-              <div className="apollo-section-header">
-                <div className="apollo-section-icon">
-                  <SearchIcon />
-                </div>
-                <label htmlFor="doctor-notes" className="apollo-section-label">
-                  Doctor Notes
-                </label>
+
+        {/* MeshGradient Background */}
+        <HeroSection
+          title=""
+          highlightText=""
+          description=""
+          buttonText=""
+          colors={contrastedColors}
+          distortion={1.2}
+          swirl={0.8}
+          speed={1.0}
+          offsetX={0.1}
+          className=""
+          veilOpacity="bg-white/10"
+          maxWidth="max-w-none"
+        />
+      </div>
+
+      {/* Emerging White Page with Two Boxes */}
+      <div style={emergingPageStyle}>
+        {/* Containers Row */}
+        <div style={{ display: 'flex', gap: '4rem', alignItems: 'stretch' }}>
+          {/* Left Container */}
+          <div style={leftContainerStyle}>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <div style={{ 
+                width: '24px', 
+                height: '24px', 
+                backgroundColor: '#0A2342', 
+                borderRadius: '4px',
+                marginRight: '0.2rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white',
+                fontSize: '14px',
+                fontWeight: 'bold'
+              }}>
               </div>
-              <textarea
-                id="doctor-notes"
-                value={textInput}
-                onChange={(e) => setTextInput(e.target.value)}
-                placeholder="Enter in patient details and diagnoses..."
-                className="apollo-textarea"
+              <h2 style={{ fontSize: '1.5rem', fontWeight: '600', margin: 0, color: '#1f2937' }}>
+                Patient Information
+              </h2>
+            </div>
+            <textarea 
+              value={textInput}
+              onChange={(e) => setTextInput(e.target.value)}
+              style={{
+                flex: 5,
+                border: '1px solid #d1d5db',
+                borderRadius: '8px',
+                padding: '1rem',
+                fontSize: '1rem',
+                fontFamily: 'system-ui, sans-serif',
+                resize: 'none',
+                outline: 'none',
+                backgroundColor: '#f9fafb'
+              }}
+              placeholder="Enter patient details, symptoms, and medical history..."
+            />
+          </div>
+
+          {/* Right Container */}
+          <div style={rightContainerStyle}>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <div style={{ 
+                width: '24px', 
+                height: '24px', 
+                backgroundColor: '#0A2342', 
+                borderRadius: '4px',
+                marginRight: '0.75rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white',
+                fontSize: '14px',
+                fontWeight: 'bold'
+              }}>
+              </div>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: '600', margin: 0, color: '#1f2937' }}>
+                AI Analysis
+              </h2>
+            </div>
+            <div style={{
+              flex: 5,
+              border: '2px dashed #d1d5db',
+              borderRadius: '8px',
+              padding: '2rem',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: '#f9fafb',
+              textAlign: 'center'
+            }}>
+              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}></div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '500', margin: '0 0 0.5rem 0', color: '#374151' }}>
+                Upload Medical Data
+              </h3>
+              <p style={{ fontSize: '0.875rem', color: '#6b7280', margin: '0 0 1rem 0' }}>
+                Upload scans, images, or research files for AI analysis
+              </p>
+              <p style={{ fontSize: '0.75rem', color: '#9ca3af', margin: '0 0 1.5rem 0' }}>
+                DICOM, PNG, JPG, PDF up to 50MB
+              </p>
+              {selectedFile && (
+                <div style={{ marginBottom: '1rem', padding: '8px 16px', background: '#e8f5e8', color: '#2d5a2d', borderRadius: '6px', fontSize: '14px', fontWeight: '500' }}>
+                  Selected: {selectedFile.name}
+                </div>
+              )}
+              <input
+                type="file"
+                accept="image/*,.dicom,.dcm,.pdf"
+                onChange={handleFileChange}
+                style={{ marginBottom: '1rem' }}
               />
             </div>
           </div>
-          
-          {/* Medical Images & Files Section */}
-          <div className="apollo-section">
-            <div className="apollo-section-glow"></div>
-            <div className="apollo-section-content">
-              <div className="apollo-section-header">
-                <div className="apollo-section-icon">
-                  <UploadIcon />
-                </div>
-                <label className="apollo-section-label">
-                  Medical Images & Files
-                </label>
-              </div>
-              <div className="apollo-upload-zone">
-                <UploadIcon className="apollo-upload-icon" />
-                <p className="apollo-upload-title">
-                  Upload medical images, scans, or research files
-                </p>
-                <p className="apollo-upload-description">
-                  DICOM, PNG, JPG, PDF up to 50MB • Drag and drop or click to browse
-                </p>
-                {selectedFile && (
-                  <div style={{ marginTop: '16px', padding: '8px 16px', background: '#e8f5e8', color: '#2d5a2d', borderRadius: '6px', fontSize: '14px', fontWeight: '500' }}>
-                    Selected: {selectedFile.name}
-                  </div>
-                )}
-                <input
-                  type="file"
-                  accept="image/*,.dicom,.dcm,.pdf"
-                  className="apollo-upload-input"
-                  onChange={handleFileChange}
-                  multiple
-                />
-              </div>
-              
-              <button 
-                className="apollo-button" 
-                onClick={async () => {
-                  await handleSubmit();
-                  if (textInput.trim() || selectedFile) {
-                    // Pass image data through navigation state
-                    const imageData = selectedFile ? result : null;
-                    navigate('/patient-profile', { 
-                      state: { 
-                        imageData: imageData 
-                      } 
-                    });
-                  }
-                }}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <div className="apollo-loading">
-                    <div className="apollo-spinner"></div>
-                    Processing...
-                  </div>
-                ) : (
-                  <>
-                    <SearchIcon />
-                    Analyze Patient Data
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
         </div>
+        
+        {/* Analyze Button - Below both containers */}
+        <button style={{
+          backgroundColor: '#0A2342',
+          color: 'white',
+          border: 'none',
+          borderRadius: '8px',
+          padding: '1.25rem 2rem',
+          fontSize: '1.25rem',
+          fontWeight: '500',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '0.5rem',
+          width: 'calc(95% + 2rem)',
+          maxWidth: '1000px',
+          height: '60px'
+        }}
+        onClick={async () => {
+          await handleSubmit();
+          if (textInput.trim() || selectedFile) {
+            const imageData = selectedFile ? result : null;
+            navigate('/patient-profile', { 
+              state: { 
+                imageData: imageData 
+              } 
+            });
+          }
+        }}
+        disabled={isLoading}
+        >
+          {isLoading ? 'Processing...' : 'Analyze Patient Data'}
+        </button>
       </div>
-
     </div>
   );
 }

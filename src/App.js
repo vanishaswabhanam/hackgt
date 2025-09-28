@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from './components/HomePage';
+import SimpleApolloHomePage from './components/SimpleApolloHomePage';
 import ResultsPage from './components/ResultsPage';
 import TreatmentPathwayPage from './components/TreatmentPathwayPage';
 import ClinicalTrialPage from './components/ClinicalTrialPage';
@@ -11,7 +12,8 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<SimpleApolloHomePage />} />
+        <Route path="/medical" element={<HomePage />} />
         <Route path="/patient-profile" element={<PatientProfilePage />} />
         <Route path="/results" element={<ResultsPage />} />
         <Route path="/treatment-pathway" element={<TreatmentPathwayPage />} />
