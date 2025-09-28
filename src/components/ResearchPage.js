@@ -379,11 +379,6 @@ function ResearchPage() {
             </div>
           </div>
 
-          <div className="apollo-research-actions">
-            <button className="apollo-button apollo-button-secondary" onClick={() => navigate('/')}>
-              ← Back to Analysis
-            </button>
-          </div>
         </div>
       </div>
     </div>
