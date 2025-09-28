@@ -431,11 +431,6 @@ function ClinicalTrialPage() {
             </div>
           </div>
 
-          <div className="apollo-clinical-actions">
-            <button className="apollo-button apollo-button-secondary" onClick={() => navigate('/')}>
-              ← Back to Analysis
-            </button>
-          </div>
         </div>
       </div>
     </div>
