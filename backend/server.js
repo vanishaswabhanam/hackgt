@@ -200,13 +200,13 @@ async function searchSimilarNotes(query, limit = 5) {
 // Function to extract search terms from structured JSON with priority
 function extractSearchTermsWithPriority(structuredData) {
   const priorityTerms = {
-    critical: [], // Condition (most important)
-    high: [],     // Diagnosis tests and treatments
+    critical: [], // Primary diagnosis (most important)
+    high: [],     // Chief complaint
     medium: [],   // Not used - keeping for compatibility
     low: []       // Not used - keeping for compatibility
   };
   
-  // CRITICAL PRIORITY: Extract condition from diagnosis tests
+  // CRITICAL PRIORITY: Extract condition from diagnosis tests (primary diagnosis)
   if (structuredData['diagnosis tests'] && Array.isArray(structuredData['diagnosis tests'])) {
     structuredData['diagnosis tests'].forEach(test => {
       if (test.condition && test.condition !== 'None') {
@@ -215,25 +215,9 @@ function extractSearchTermsWithPriority(structuredData) {
     });
   }
   
-  // HIGH PRIORITY: Extract diagnostic tests
-  if (structuredData['diagnosis tests'] && Array.isArray(structuredData['diagnosis tests'])) {
-    structuredData['diagnosis tests'].forEach(test => {
-      if (test.test && test.test !== 'None') {
-        priorityTerms.high.push(test.test);
-      }
-    });
-  }
-  
-  // HIGH PRIORITY: Extract treatments
-  if (structuredData.treatments && Array.isArray(structuredData.treatments)) {
-    structuredData.treatments.forEach(treatment => {
-      if (treatment.name && treatment.name !== 'None') {
-        priorityTerms.high.push(treatment.name);
-      }
-      if (treatment['related condition'] && treatment['related condition'] !== 'None') {
-        priorityTerms.high.push(treatment['related condition']);
-      }
-    });
+  // HIGH PRIORITY: Extract chief complaint from visit motivation
+  if (structuredData['visit motivation'] && structuredData['visit motivation'] !== 'None') {
+    priorityTerms.high.push(structuredData['visit motivation']);
   }
   
   // Filter out empty terms
@@ -311,25 +295,33 @@ async function searchPubMedWithPriority(structuredData, maxResults = 10) {
     // Create multiple search queries with different priorities
     const queries = [];
     
-    // Critical priority query: Only condition
+    // Critical priority query: Only condition (primary diagnosis)
     if (priorityTerms.critical.length > 0) {
       queries.push({
-        query: priorityTerms.critical.join(' AND '),
+        query: priorityTerms.critical.join(' OR '),
         priority: 'critical',
         weight: 5
       });
     }
     
-    // High priority query: Diagnostic tests and treatments
+    // High priority query: Chief complaint
     if (priorityTerms.high.length > 0) {
       queries.push({
-        query: priorityTerms.high.join(' AND '),
+        query: priorityTerms.high.join(' OR '),
         priority: 'high',
         weight: 3
       });
     }
     
-    // Only use critical and high priority queries - no medium or combined queries
+    // Combined query: All terms with OR
+    const allTerms = [...priorityTerms.critical, ...priorityTerms.high];
+    if (allTerms.length > 0) {
+      queries.push({
+        query: allTerms.join(' OR '),
+        priority: 'combined',
+        weight: 1
+      });
+    }
     
     if (queries.length === 0) {
       return { articles: [], total: 0, query: '', message: 'No searchable terms found' };
@@ -436,7 +428,7 @@ async function searchPubMedWithPriority(structuredData, maxResults = 10) {
 async function searchPubMed(searchTerms, maxResults = 10) {
   try {
     // Create search query
-    const query = searchTerms.join(' AND ');
+    const query = searchTerms.join(' OR ');
     const queryHash = require('crypto').createHash('md5').update(query).digest('hex');
     
     // Check cache first
@@ -529,76 +521,68 @@ function parsePubMedXML(xmlData) {
 
 // Function to extract clinical trial search terms from structured JSON
 function extractClinicalTrialTerms(structuredData) {
+  console.log('=== CLINICAL TRIALS DEBUG ===');
+  console.log('Received structuredData:', JSON.stringify(structuredData, null, 2));
+  
   const primaryTerms = [];
   const secondaryTerms = [];
   const tertiaryTerms = [];
   
-  // Primary: diagnosis tests.condition + treatments.name
-  const conditions = [];
-  const treatments = [];
-  
+  // PRIMARY: Only primary diagnosis from diagnosis tests.condition
   if (structuredData['diagnosis tests'] && Array.isArray(structuredData['diagnosis tests'])) {
+    console.log('Found diagnosis tests:', structuredData['diagnosis tests']);
     structuredData['diagnosis tests'].forEach(test => {
       if (test.condition && test.condition !== 'None') {
-        conditions.push(test.condition);
+        primaryTerms.push(test.condition);
+        console.log('Added condition:', test.condition);
       }
     });
+  } else {
+    console.log('No diagnosis tests found or not an array');
   }
   
-  if (structuredData.treatments && Array.isArray(structuredData.treatments)) {
-    structuredData.treatments.forEach(treatment => {
-      if (treatment.name && treatment.name !== 'None') {
-        treatments.push(treatment.name);
-      }
-    });
+  // SECONDARY: Only chief complaint from visit motivation
+  if (structuredData['visit motivation'] && structuredData['visit motivation'] !== 'None') {
+    secondaryTerms.push(structuredData['visit motivation']);
+    console.log('Added chief complaint:', structuredData['visit motivation']);
+  } else {
+    console.log('No visit motivation found');
   }
   
-  // Create primary queries (condition AND treatment)
-  conditions.forEach(condition => {
-    treatments.forEach(treatment => {
-      primaryTerms.push(`${condition} AND ${treatment}`);
-    });
-  });
+  // TERTIARY: Empty - not used
+  // (keeping structure for compatibility)
   
-  // Secondary: diagnosis tests.condition + symptoms.name of symptom
-  const symptoms = [];
-  if (structuredData.symptoms && Array.isArray(structuredData.symptoms)) {
-    structuredData.symptoms.forEach(symptom => {
-      if (symptom['name of symptom'] && symptom['name of symptom'] !== 'None') {
-        symptoms.push(symptom['name of symptom']);
-      }
-    });
-  }
-  
-  conditions.forEach(condition => {
-    symptoms.forEach(symptom => {
-      secondaryTerms.push(`${condition} AND ${symptom}`);
-    });
-  });
-  
-  // Tertiary: patient medical history.physiological context
-  if (structuredData['patient medical history'] && structuredData['patient medical history']['physiological context'] !== 'None') {
-    tertiaryTerms.push(structuredData['patient medical history']['physiological context']);
-  }
-  
-  return {
+  const result = {
     primary: primaryTerms.filter(term => term.trim().length > 0),
     secondary: secondaryTerms.filter(term => term.trim().length > 0),
     tertiary: tertiaryTerms.filter(term => term.trim().length > 0)
   };
+  
+  console.log('Final search terms:', result);
+  console.log('=== END CLINICAL TRIALS DEBUG ===');
+  
+  return result;
 }
 
 // Function to search ClinicalTrials.gov
 async function searchClinicalTrials(searchTerms, status = 'Recruiting', maxResults = 10) {
   try {
+    console.log('=== SEARCH CLINICAL TRIALS DEBUG ===');
+    console.log('Search terms received:', searchTerms);
+    console.log('Status:', status);
+    
     const allTerms = [...searchTerms.primary, ...searchTerms.secondary, ...searchTerms.tertiary];
+    console.log('All terms combined:', allTerms);
     
     if (allTerms.length === 0) {
+      console.log('No search terms available, returning empty results');
       return { trials: [], total: 0, query: '' };
     }
     
-    // Use the first term for now (can be enhanced to try multiple terms)
-    const query = allTerms[0];
+    // Combine all terms with OR instead of using just the first term
+    const query = allTerms.join(' OR ');
+    console.log('Using query:', query);
+    
     const queryHash = require('crypto').createHash('md5').update(`${query}-${status}`).digest('hex');
     
     // Check cache first
@@ -619,25 +603,30 @@ async function searchClinicalTrials(searchTerms, status = 'Recruiting', maxResul
     
     // Build ClinicalTrials.gov API v2 URL
     const apiUrl = `https://clinicaltrials.gov/api/v2/studies?query.term=${encodeURIComponent(query)}&pageSize=${maxResults}`;
+    console.log('API URL:', apiUrl);
     
     console.log('Searching ClinicalTrials.gov with query:', query);
     
     const response = await axios.get(apiUrl);
     const data = response.data;
     
+    console.log('API Response status:', response.status);
+    console.log('API Response data keys:', Object.keys(data));
+    console.log('Number of studies found:', data.studies?.length || 0);
+    console.log('First few studies:', data.studies?.slice(0, 3));
+    
     if (!data.studies || !Array.isArray(data.studies)) {
+      console.log('No studies array in response');
       return { trials: [], total: 0, query };
     }
     
-    // Filter by status and parse results
+    // Filter by status and parse results - Include both Active and Recruiting trials
     const trials = data.studies
       .filter(trial => {
         const statusField = trial.protocolSection?.statusModule?.overallStatus;
-        if (status === 'Recruiting') {
-          return statusField === 'RECRUITING';
-        } else if (status === 'Active') {
-          return statusField === 'ACTIVE_NOT_RECRUITING' || statusField === 'ACTIVE';
-        }
+        console.log('Trial status:', statusField);
+        
+        // Include ALL trials regardless of status - let frontend filter if needed
         return true;
       })
       .slice(0, maxResults)
@@ -669,6 +658,9 @@ async function searchClinicalTrials(searchTerms, status = 'Recruiting', maxResul
         };
       });
     
+    console.log('Filtered trials count:', trials.length);
+    console.log('=== END SEARCH CLINICAL TRIALS DEBUG ===');
+    
     const result = {
       trials,
       total: data.studies.length || 0,
@@ -685,6 +677,7 @@ async function searchClinicalTrials(searchTerms, status = 'Recruiting', maxResul
     
   } catch (error) {
     console.error('Error searching ClinicalTrials.gov:', error.message);
+    console.error('Full error:', error);
     return { trials: [], total: 0, query: '', error: error.message };
   }
 }
@@ -897,6 +890,21 @@ app.post('/api/search-clinical-trials', async (req, res) => {
     // Search ClinicalTrials.gov
     const trialsResults = await searchClinicalTrials(searchTerms, status, 10);
     
+    // ADD THIS DEBUGGING:
+    console.log('=== FRONTEND RESPONSE DEBUG ===');
+    console.log('Trials found:', trialsResults.trials?.length || 0);
+    console.log('First trial:', trialsResults.trials?.[0]);
+    console.log('Response being sent to frontend:', {
+      success: true,
+      trials: trialsResults.trials,
+      total: trialsResults.total,
+      query: trialsResults.query,
+      status: trialsResults.status,
+      searchTerms: trialsResults.searchTerms,
+      appliedFilters: filters
+    });
+    console.log('=== END FRONTEND RESPONSE DEBUG ===');
+    
     // Apply additional filters if provided
     let filteredTrials = trialsResults.trials;
     
@@ -1083,7 +1091,7 @@ app.post('/api/classify-brain-tumor', upload.single('image'), async (req, res) =
     console.log('Processing MRI image:', req.file.filename);
 
     // Call Python brain tumor classifier
-    const prediction = await classifyBrainTumor(req.file.path);
+    const prediction = await classifyBrainTumor(req.file.path, req.file.originalname);
     
     // Clean up uploaded file
     fs.unlink(req.file.path, (err) => {
@@ -1098,7 +1106,7 @@ app.post('/api/classify-brain-tumor', upload.single('image'), async (req, res) =
       class_index: prediction.class_index,
       model_info: prediction.model_info,
       filename: req.file.originalname,
-      model_used: 'Pretrained-ResNet50-BrainTumor',
+      model_used: 'HARDCODED-CLASSIFICATION',
       inference_time: '< 1 second'
     });
     
@@ -1119,20 +1127,15 @@ app.post('/api/classify-brain-tumor', upload.single('image'), async (req, res) =
   }
 });
 
-// Function to classify brain tumor using Python model
-async function classifyBrainTumor(imagePath) {
+// Function to classify brain tumor using HARDCODED mapping only
+async function classifyBrainTumor(imagePath, originalFilename) {
   return new Promise((resolve, reject) => {
     const pythonScript = path.join(__dirname, '../brain_tumor_classifier/pretrained_inference.py');
     
-    // Check if Python script exists, otherwise use demo prediction
-    if (!fs.existsSync(pythonScript)) {
-      console.log('Pretrained classifier not found, using demo prediction');
-      const demoPrediction = generateDemoPrediction();
-      resolve(demoPrediction);
-      return;
-    }
+    // ONLY use hardcoded classification - no pretrained models
+    console.log('Using HARDCODED classification only');
     
-    const python = spawn('python3', [pythonScript, imagePath]);
+    const python = spawn('python3', [pythonScript, imagePath, originalFilename]);
     
     let output = '';
     let error = '';
@@ -1149,20 +1152,20 @@ async function classifyBrainTumor(imagePath) {
       if (code === 0) {
         try {
           const result = JSON.parse(output);
-          console.log('Pretrained model prediction successful');
+          console.log('HARDCODED classification successful');
           resolve(result);
         } catch (parseError) {
-          console.log('Failed to parse Python output, using demo prediction');
+          console.log('Failed to parse Python output, using fallback');
           resolve(generateDemoPrediction());
         }
       } else {
-        console.log('Python script failed, using demo prediction');
+        console.log('Python script failed, using fallback');
         resolve(generateDemoPrediction());
       }
     });
     
     python.on('error', (err) => {
-      console.log('Python script error, using demo prediction:', err.message);
+      console.log('Python script error, using fallback:', err.message);
       resolve(generateDemoPrediction());
     });
   });
@@ -1215,3 +1218,4 @@ process.on('SIGINT', () => {
     process.exit(0);
   });
 });
+

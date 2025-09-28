@@ -33,8 +33,8 @@ function ClinicalTrialPage() {
     setError(null);
     
     try {
-      // Search for recruiting trials
-      const recruitingResponse = await fetch('http://localhost:5001/api/search-clinical-trials', {
+      // Search for both Active and Recruiting trials in one call
+      const response = await fetch('http://localhost:5001/api/search-clinical-trials', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,34 +42,24 @@ function ClinicalTrialPage() {
         body: JSON.stringify({
           structuredData,
           imageData,
-          status: 'Recruiting',
+          status: 'Both', // Search for both Active and Recruiting
           filters
         }),
       });
 
-      // Search for active trials
-      const activeResponse = await fetch('http://localhost:5001/api/search-clinical-trials', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          structuredData,
-          imageData,
-          status: 'Active',
-          filters
-        }),
-      });
-
-      const recruitingResult = await recruitingResponse.json();
-      const activeResult = await activeResponse.json();
+      const result = await response.json();
       
-      if (recruitingResult.success) {
-        setRecruitingTrials(recruitingResult.trials || []);
-      }
-      
-      if (activeResult.success) {
-        setActiveTrials(activeResult.trials || []);
+      if (result.success) {
+        // Split trials by status
+        const recruitingTrials = result.trials.filter(trial => 
+          trial.status === 'RECRUITING'
+        );
+        const activeTrials = result.trials.filter(trial => 
+          trial.status === 'ACTIVE_NOT_RECRUITING' || trial.status === 'ACTIVE'
+        );
+        
+        setRecruitingTrials(recruitingTrials);
+        setActiveTrials(activeTrials);
       }
       
     } catch (err) {

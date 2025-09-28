@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import PatientProfile from './PatientProfile';
 import { HeroSection } from './ui/hero-section-with-smooth-bg-shader';
@@ -28,6 +28,24 @@ function PatientProfilePage() {
   // Debug: Log the data to see what we're working with
   console.log('PatientProfilePage - structuredData:', fallbackStructuredData);
   console.log('PatientProfilePage - originalText:', fallbackOriginalText);
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    // Use setTimeout to ensure the page has finished rendering
+    const scrollToTop = () => {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      });
+    };
+    
+    // Immediate scroll
+    window.scrollTo(0, 0);
+    
+    // Delayed scroll as backup
+    setTimeout(scrollToTop, 100);
+  }, []);
 
   const handleBackToHome = () => {
     navigate('/');
